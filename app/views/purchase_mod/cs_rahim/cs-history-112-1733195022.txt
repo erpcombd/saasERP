@@ -1,0 +1,14 @@
+||AMI Industries (Pvt.) Ltd.||Comparison Statement for Server of ERP Software||01||Server||RM Engineering Ltd
+R M Organics
+F&M Associates
+||Server Specification
+Server Internet Connection
+Object Storage (Backup)
+Additional Software
+One Time Cost (OTC)
+Server Cost
+Object Storage Cost
+Software License Fee
+Recurring Billing
+VAT (5%)
+||[data-3_1]8 Core vCPU, 16 GB RAM, 01 TB NVMe Storage[data-3_1][data-3_2]8 Core vCPU, 16 GB RAM, 01 TB NVMe Storage[data-3_2][data-3_3]8 Core vCPU, 16 GB RAM, 01 TB NVMe Storage[data-3_3][data-4_1]100 Mbps[data-4_1][data-4_2]100 Mbps[data-4_2][data-4_3]100 Mbps[data-4_3][data-5_1]02 TB[data-5_1][data-5_2]02 TB[data-5_2][data-5_3]02 TB[data-5_3][data-6_1]cPanel, Imunify360, CloudLinux[data-6_1][data-6_2]cPanel, Imunify360, CloudLinux[data-6_2][data-6_3]cPanel, Imunify360, CloudLinux[data-6_3][data-11_1]Monthly[data-11_1][data-11_2]Monthly[data-11_2][data-11_3]Monthly[data-11_3]||||||||||||

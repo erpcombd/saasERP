@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRM Analytical Dashboard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts - Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary dashboard-header sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-chart-line me-2"></i>
+                <span class="fw-bold">HRM Analytics</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Employees</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Attendance</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Leave</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Payroll</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Reports</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <!-- Placeholder for filters/search -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-filter me-1"></i> Filters
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" id="filterDropdown">
+                            <!-- PHP will inject filter options here -->
+                            <li><a class="dropdown-item" href="#">All Departments</a></li>
+                            <li><a class="dropdown-item" href="#">IT Department</a></li>
+                            <li><a class="dropdown-item" href="#">HR Department</a></li>
+                            <li><a class="dropdown-item" href="#">Finance Department</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-calendar-alt me-1"></i>
+                            <span id="currentDate"><!-- PHP will inject current date --></span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> Admin
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Quick Stats Bar -->
+    <div class="container-fluid bg-light py-2 quick-stats-bar">
+        <div class="row g-2 text-center">
+            <div class="col-md-3 col-6">
+                <div class="quick-stat">
+                    <i class="fas fa-users text-primary"></i>
+                    <span class="stat-value" id="quickStatHeadcount">1250</span>
+                    <span class="stat-label">Employees</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="quick-stat">
+                    <i class="fas fa-user-check text-success"></i>
+                    <span class="stat-value" id="quickStatPresent">1180</span>
+                    <span class="stat-label">Present Today</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="quick-stat">
+                    <i class="fas fa-user-clock text-warning"></i>
+                    <span class="stat-value" id="quickStatLeave">45</span>
+                    <span class="stat-label">On Leave</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="quick-stat">
+                    <i class="fas fa-clipboard-list text-danger"></i>
+                    <span class="stat-value" id="quickStatPending">28</span>
+                    <span class="stat-label">Pending Requests</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Content -->
+    <div class="container-fluid py-4">
+        <!-- HR Workforce Analytics Summary Row -->
+        <div class="row mb-4">
+            <div class="col-md-4 mb-4 mb-md-0">
+                <div class="card border-left-primary h-100 shadow-sm">
+                    <div class="card-body counter-card">
+                        <div class="counter-value" id="totalHeadcount">0</div>
+                        <div class="counter-label">Total Headcount</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4 mb-md-0">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header">
+                        <h6>Gender Distribution</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="genderDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header">
+                        <h6>Age Distribution</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="ageDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Department Analytics Row -->
+        <div class="row mb-4">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header">
+                        <h6>Department Headcount</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="departmentHeadcountChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header">
+                        <h6>Employee Turnover Rate</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="turnoverRateChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attendance and Leave Summary Row -->
+        <div class="row mb-4">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header">
+                        <h6>Organization-wise Attendance Summary (Today)</h6>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="attendanceFilterDropdown" data-bs-toggle="dropdown">
+                                Filter by Department
+                            </button>
+                            <ul class="dropdown-menu" id="attendanceDeptFilter">
+                                <!-- PHP will inject department options here -->
+                                <li><a class="dropdown-item" href="#">All Departments</a></li>
+                                <li><a class="dropdown-item" href="#">IT Department</a></li>
+                                <li><a class="dropdown-item" href="#">HR Department</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="organizationAttendanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header">
+                        <h6>Monthly Individual Attendance Summary</h6>
+                        <div>
+                            <!-- PHP will inject employee selection dropdown here -->
+                            <select class="form-select form-select-sm" id="employeeSelector">
+                                <option value="emp001">John Doe (EMP001)</option>
+                                <option value="emp002">Jane Smith (EMP002)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="individualAttendanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Individual Leave and Conveyance Summary Row -->
+        <div class="row mb-4">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header">
+                        <h6>Individual Leave Summary</h6>
+                        <div>
+                            <!-- PHP will inject employee selection dropdown here -->
+                            <select class="form-select form-select-sm" id="leaveEmployeeSelector">
+                                <option value="emp001">John Doe (EMP001)</option>
+                                <option value="emp002">Jane Smith (EMP002)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="individualLeaveChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header">
+                        <h6>Individual Conveyance Summary</h6>
+                        <div>
+                            <!-- PHP will inject employee selection dropdown here -->
+                            <select class="form-select form-select-sm" id="conveyanceEmployeeSelector">
+                                <option value="emp001">John Doe (EMP001)</option>
+                                <option value="emp002">Jane Smith (EMP002)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="conveyanceSummaryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance and Training Row -->
+        <div class="row mb-4">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header">
+                        <h6>Performance Ratings Distribution</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="performanceRatingsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header">
+                        <h6>Training Completion Status</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="trainingCompletionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Requests and Upcoming Birthdays Row -->
+        <div class="row mb-4">
+            <div class="col-lg-8 mb-4 mb-lg-0">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header">
+                        <h6>Pending Request Summary</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="pendingRequestsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header">
+                        <h6>Upcoming Birthdays</h6>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="upcomingBirthdays" class="birthday-container">
+                            <!-- PHP will inject birthday cards here -->
+                            <!-- Sample birthday card structure -->
+                            <div class="birthday-card">
+                                <img src="https://via.placeholder.com/50" alt="Profile" class="birthday-img">
+                                <div>
+                                    <div class="fw-bold">John Doe</div>
+                                    <small class="text-muted">May 15</small>
+                                </div>
+                            </div>
+                            <!-- Repeat for other birthdays -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recruitment and Onboarding Row -->
+        <div class="row">
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header">
+                        <h6>Recruitment Pipeline</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="recruitmentPipelineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header">
+                        <h6>Onboarding Status</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="onboardingStatusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header">
+                        <h6>Upcoming Interviews</h6>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item interview-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">Senior Developer</h6>
+                                    <small class="text-primary">Today, 10:00 AM</small>
+                                </div>
+                                <p class="mb-1">Candidate: Michael Brown</p>
+                                <small class="text-muted">Interviewer: Jane Smith</small>
+                            </div>
+                            <div class="list-group-item interview-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">HR Manager</h6>
+                                    <small class="text-primary">Today, 2:30 PM</small>
+                                </div>
+                                <p class="mb-1">Candidate: Sarah Johnson</p>
+                                <small class="text-muted">Interviewer: Robert Wilson</small>
+                            </div>
+                            <div class="list-group-item interview-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">UX Designer</h6>
+                                    <small class="text-primary">Tomorrow, 11:00 AM</small>
+                                </div>
+                                <p class="mb-1">Candidate: David Lee</p>
+                                <small class="text-muted">Interviewer: Emily Davis</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white py-4 mt-auto border-top">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-between small">
+                <div class="text-muted">Copyright &copy; HRM Analytics Dashboard 2023</div>
+                <div>
+                    <a href="#">Privacy Policy</a>
+                    &middot;
+                    <a href="#">Terms &amp; Conditions</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="dashboard.js"></script>
+</body>
+</html>

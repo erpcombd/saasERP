@@ -1,0 +1,11 @@
+/* CSS Document */
+
+.product_small_view {
+    margin-right: 10px;
+    max-width: 45px;
+}
+
+.product_md_view {
+    margin-right: 10px;
+    max-width: 85px;
+}

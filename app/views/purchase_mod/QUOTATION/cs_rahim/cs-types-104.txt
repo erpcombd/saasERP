@@ -1,0 +1,5 @@
+Payment Mode
+Delivery Place
+Delivery Time
+VAT & TAX
+Specification

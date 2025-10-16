@@ -1,0 +1,29 @@
+ 
+
+/*Medium devices (tablets, 768px and up)*/
+
+@media (min-width: 100px) and (max-width: 1023px) { 
+	.main_content
+	{
+	position: relative; 
+	float: left; 
+	width: 100%;
+	}
+	.sidebar{width:50%;}
+}
+
+@media (min-width: 1024px) { 
+	.main_content{
+	position: relative; 
+	float:right;
+	width: 83%;
+	}
+	.sidebar{width:17%;}
+}
+
+
+
+
+
+
+

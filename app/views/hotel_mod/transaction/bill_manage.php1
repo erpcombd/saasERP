@@ -1,0 +1,96 @@
+<?php
+session_start();
+ob_start();
+require "../../support/inc.all.php";
+$title='Bill Information';
+do_calander('#qc_date');
+$table='hms_bill_payment';
+$unique='id';
+$today=date("Y-m-d");
+
+if(isset($_POST['new']))
+$r_id=$$unique = $_POST['r_id'];
+elseif($_GET['r_id']>0)
+$r_id=$$unique = $_GET['r_id'];
+
+if($r_id>0)
+{		$condition="id=".$r_id;
+		$data=db_fetch_object('hms_bill_payment',$condition);
+		while (list($key, $value)=each($data))
+		{ $$key=$value;}
+		$production_id=$id;
+		$total_qty_for_qc=$qty;
+}
+
+
+if(isset($_POST['add']))
+{		$table		='proc_production_qc';
+		$crud      	=new crud($table);
+		$sql="update proc_product_info set qop=qop-".($_POST['total_qty_for_qc']).",qoh=qoh+".($_POST['qty_approved'])." where id=".$_POST['product_id']." limit 1";
+		mysql_query($sql);
+		$_POST['qty_rejected']=$_POST['total_qty_for_qc']-$_POST['qty_approved'];
+		$crud->insert();
+}
+
+
+?>
+<script language="javascript">
+function count()
+{
+document.getElementById('material_remening_qty').value=((document.getElementById('purchase_invoice_qty').value)*1)-((document.getElementById('material_receive_qty').value)*1);
+}
+</script>
+<div class="form-container_large">
+<form action="" method="post" name="codz" id="codz">
+<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td colspan="2">
+			<fieldset>
+			
+			<div>
+			<label>Room Name : </label>
+			<select name="r_id" id="r_id">
+              <? 
+			  $sql="SELECT a.id,concat(a.room_name,' : ',b.room_type) FROM `hms_hotel_room` a,`hms_room_type` b WHERE b.id=a.room_type_id order by b.room_type";
+			  advance_foreign_relation($sql);?>
+			  </select>
+			</div>
+			
+			<div class="buttonrow" style="margin-left:154px;"><input name="new" type="submit" class="btn1" value="Search" />
+			</div>
+			</fieldset>
+			<br /></td>
+    </tr>
+</table>
+</form>
+
+<? 
+$res='select * from `hms_bill_payment` where 1 ';
+?>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+    <tr>
+      <td><div class="tabledesign2">
+        <? 
+echo link_report($res);
+		?>
+
+      </div></td>
+    </tr>
+	    	
+	
+
+				
+    <tr>
+     <td>
+
+ </td>
+    </tr>
+  </table>
+</div>
+
+<?
+$main_content=ob_get_contents();
+ob_end_clean();
+include ("../../template/main_layout.php");
+?>

@@ -1,0 +1,5 @@
+||AMI Industries (Pvt.) Ltd.||Server for ERP Software||1||pcs||InterCloud Limited
+Al- Mawa Traders
+||Server Specification
+Additional Software Specification
+||[data-1_1]48800[data-1_1][data-2_1]48,800.00[data-2_1][data-3_1]32 Core vCPU, 64 GB RAM, 01 TB NVMe Storage, 100Mbps Internet Speed[data-3_1][data-4_1]N/A[data-4_1]||||||||||||

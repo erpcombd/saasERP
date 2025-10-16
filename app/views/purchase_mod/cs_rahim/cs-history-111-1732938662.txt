@@ -1,0 +1,14 @@
+||AMI Industries (Pvt.) Ltd.||Server of ERP Software||01||Server||InterCloud Limited
+Dhaka Colo (Pvt.) Ltd.
+Access Telecom (BD) Ltd.
+||Server Specification
+Server Internet Connection
+Object Storage (Backup)
+Additional Software
+One Time Cost (OTC)
+Server Cost
+Object Storage Cost
+Software License
+Recurring Billing
+VAT (5%)
+||[data-1_1]55,200.00[data-1_1][data-1_2]75,285.00[data-1_2][data-1_3]102,940.00[data-1_3][data-2_1]55,200.00[data-2_1][data-2_2]75,285.00[data-2_2][data-2_3]102,940.00[data-2_3][data-3_1]32 Core vCPU, 64 GB RAM, 01 TB NVMe Storage[data-3_1][data-3_2]32 Core vCPU, 64 GB RAM, 01 TB NVMe Storage[data-3_2][data-3_3]32 Core vCPU, 64 GB RAM, 01 TB NVMe Storage[data-3_3][data-4_1]100 Mbps[data-4_1][data-4_2]20 Mbps[data-4_2][data-4_3]10 Mbps[data-4_3][data-5_1]02 TB[data-5_1][data-5_2]02 TB[data-5_2][data-5_3]02 TB[data-5_3][data-6_1]Not Included[data-6_1][data-6_2]cPanel, Imunify360, CloudLinux[data-6_2][data-6_3]cPanel, Imunify360, CloudLinux[data-6_3][data-7_1]N/A[data-7_1][data-7_2]5,000.00[data-7_2][data-7_3]N/A[data-7_3][data-8_1]48,800.00[data-8_1][data-8_2]40,000.00[data-8_2][data-8_3]80,000.00[data-8_3][data-9_1]6,400.00[data-9_1][data-9_2]25,000.00[data-9_2][data-9_3]Included[data-9_3][data-10_1]N/A[data-10_1][data-10_2]6700[data-10_2][data-10_3]22,940.00[data-10_3][data-11_1]Monthly[data-11_1][data-11_2]Monthly[data-11_2][data-11_3]Monthly[data-11_3][data-12_1]Excluding[data-12_1][data-12_2]Including[data-12_2][data-12_3]Excluding[data-12_3]||||InterCloud Limited can provide 100mbps internet connectivity for the server. Since they don’t offer additional software, you can purchase those from another provider in the market.||Nasir Uddin||||||

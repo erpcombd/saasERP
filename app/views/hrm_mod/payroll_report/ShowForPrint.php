@@ -1,0 +1,116 @@
+<?php
+
+session_start();
+
+require "../../config/inc.all.php";
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
+$datatodisplay=$_REQUEST['datatodisplay1'];
+
+$datatodisplay=str_replace('tr style="display: none;"','tr',$datatodisplay);
+
+
+
+$datatodisplay=str_replace('\"','',$datatodisplay);
+
+?>
+
+<html>
+
+<head>
+
+<link href="../css/report.css" type="text/css" rel="stylesheet"/>
+
+<style type="text/css">
+
+<!--
+
+.style1 {
+
+	font-size: 18px;
+
+	font-weight: bold;
+
+}
+
+-->
+
+</style>
+
+</head>
+
+<body onLoad="window.print()">
+
+<table width="90%" align="center" cellpadding="0" cellspacing="0">
+
+          <tr>
+
+            <td style="border:0px" width="1%">
+
+			<? $path='../logo/'.$_SESSION['proj_id'].'.jpg';
+
+			if(is_file($path)) echo '<img src="'.$path.'" height="80" />';?>			</td>
+
+            <td style="border:0px"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+              <tr>
+
+                <td style="border:0px" align="center" class="title">&nbsp;
+
+								<?
+
+if($_SESSION['user']['group']>1)
+
+echo find_a_field('user_group','group_name',"id=".$_SESSION['user']['group']);
+
+else
+
+echo $_SESSION['proj_name'];
+
+				?>
+
+                &nbsp;</td>
+
+              </tr>
+
+              <tr>
+
+                <td align="center" style="border:0px; padding-left:25px;"><?=$_SESSION['company_address']?> </td>
+
+              </tr>
+
+              
+
+            </table></td>
+
+          </tr>
+
+          <tr>
+
+            <td colspan="2" align="center" style="border:0px"><span class="style1">
+
+            <?=$_REQUEST['page_title']?>
+
+            
+
+			<?=$_REQUEST['report_detail']?></span></td>
+			<td align="right" style="border:0px;"><span><? echo date("Y-m-d h:i:sa") ?></span></td>
+
+          </tr>
+
+<thead>
+<tr>
+<?=$datatodisplay?>
+</tr>
+</thead>
+</table>
+
+<br>
+
+
+</body>
+
+</html>
+

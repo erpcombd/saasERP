@@ -1,0 +1,46 @@
+
+table .table-bordered  thead  tr  th{
+border:1px solid black !important;
+}
+table .table-bordered  tbody  tr, table .table-bordered  tbody td{
+border:1px solid black !important;
+}
+
+body{
+  font-size:16px;
+}
+#pr input[type="button"] {
+  background-color: #c1f4ff;
+  color: #333;
+  font-weight: bolder;
+  border-radius: 5px;
+  border: 1px solid #333;
+  cursor: pointer;
+}
+
+@media print {
+thead {display: table-header-group;}
+table tr.page-break{
+page-break-after:always
+} 
+
+/*    .header {
+      position: fixed;
+      top: 0;
+  }
+  */
+/*	.mid{
+      margin-top: 170px;
+      margin-bottom: 170px;
+  }*/
+  #pr{
+  display:none;
+  
+  }
+  
+  .footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+  }
+}

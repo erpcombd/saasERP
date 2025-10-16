@@ -1,0 +1,14 @@
+||AMI Industries (Pvt.) Ltd.||ERP Server||01||Server||InterCloud Limited
+Coloasia Limited
+DhakaColo (Pvt.) Limited
+||Server Specification
+Server Internet Connection
+Object Storage (Backup)
+Additional Software
+One Time Cost (OTC)
+Server Cost
+Object Storage Cost
+Software License Fee
+Recurring Billing
+VAT (5%)
+||[data-1_2]31,143.00[data-1_2][data-1_3]45,000.00[data-1_3][data-2_2]31,143.00[data-2_2][data-2_3]45,000.00[data-2_3][data-3_1]8 Core vCPU, 16 GB RAM, 01 TB NVMe Storage[data-3_1][data-3_2]8 Core vCPU, 16 GB RAM, 01 TB SSD Storage[data-3_2][data-3_3]8 Core vCPU, 16 GB RAM, 01 TB NVMe Storage[data-3_3][data-4_1]100 Mbps[data-4_1][data-4_2]20 Mbps[data-4_2][data-4_3]20 Mbps[data-4_3][data-5_1]02 TB[data-5_1][data-5_2]02 TB[data-5_2][data-5_3]02 TB[data-5_3][data-6_1]Not Included[data-6_1][data-6_2]Not Included[data-6_2][data-6_3]cPanel, Imunify360, CloudLinux[data-6_3][data-7_1]N/A[data-7_1][data-7_2]N/A[data-7_2][data-7_3]3,000.00[data-7_3][data-8_2]29,660.00[data-8_2][data-8_3]18,300.00[data-8_3][data-9_2]N/A[data-9_2][data-9_3]15,000.00[data-9_3][data-10_1]N/A[data-10_1][data-10_2]N/A[data-10_2][data-10_3]6,700.00[data-10_3][data-11_1]Monthly[data-11_1][data-11_2]Monthly[data-11_2][data-11_3]Monthly[data-11_3][data-12_1]Excluding[data-12_1][data-12_2]1,483.00[data-12_2][data-12_3]2,000.00[data-12_3]||||||||||||

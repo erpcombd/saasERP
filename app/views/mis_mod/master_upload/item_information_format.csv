@@ -1,0 +1,3 @@
+item_name,group_for,sub_group_name,item_description,finish_goods_code,product_nature,item_brand,sku_code,unit_name,pack_unit,pack_size,purchase_unit,purchase_size,d_price,cost_price,sale_price,min_stock,status,item_type
+excel-test1,1,Finish Goods,excel-test1,1001,Salable,,,Pcs,,1,,0,13.9,0,0,50,Active,Non-Serialized
+excel-test2,1,Raw Materials,excel-test2,1002,Salable,,,KG,,1,,0,13.9,0,0,50,Active,Non-Serialized

@@ -1,0 +1,13 @@
+RewriteEngine On
+RewriteBase /app/views/ss_modules/
+
+# Return 404 for requests for specific PHP files
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteCond %{REQUEST_URI} ^/app/views/ss_modules/(fahim|fahim2)\.php$ [OR]
+RewriteCond %{REQUEST_URI} ^/app/views/ss_modules/ss_main/(eprocurement_entry|eprocurement_entry_entry|ss_admin_entry)\.php$
+RewriteRule ^ - [R=404]
+
+# Redirect all other non-existent requests to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /app/views/ss_modules/routingpath/index.php [L]

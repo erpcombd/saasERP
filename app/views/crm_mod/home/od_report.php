@@ -1,0 +1,131 @@
+<?php
+require_once "../../../controllers/routing/default_values.php";
+require_once SERVER_CORE."routing/layout.top.php";
+$title='Apps OD & TADA Report';
+do_calander("#f_date");
+do_calander("#t_date");
+auto_complete_from_db('dealer_info','dealer_code','concat(dealer_code,"-",dealer_name_e)','1','dealer_code');
+auto_complete_from_db('dealer_info','dealer_code','concat(dealer_code,"-",dealer_name_e)','1','dealer_code_to');
+auto_complete_from_db('item_info','concat(finish_goods_code,"-",item_name)','item_id','1 and product_nature="Salable" and finish_goods_code>0 and finish_goods_code<5000','item_id');?>
+<div class="d-flex justify-content-center">
+	<form class="n-form1 pt-4" action="master_report.php" method="post" name="form1" target="_blank" id="form1">
+		<div class="row m-0 p-0 fo-width1">
+			<div class="col-sm-5">
+				<div align="left">Select Report </div>
+					<div class="form-check">
+						<input name="report" type="radio" class="radio1" id="report1_btn_20241029" value="20241029" checked="checked" />
+						<label class="form-check-label p-0" for="report1_btn_20241029">OD & TADA Details (20241029) </label>
+					</div>
+					<div class="form-check">
+						<input name="report" type="radio" class="radio1" id="report1_btn_20241030" value="202410292" />
+						<label class="form-check-label p-0" for="report1_btn_20241030"> TADA Summary Report(202410292) </label>
+					</div>
+					<div class="form-check">
+						<input name="report" type="radio" class="radio1" id="report1_btn_20250806" value="20250806" />
+						<label class="form-check-label p-0" for="report1_btn_20241030"> Conveyance Bill Details Report(20250806) </label>
+					</div>
+					<div class="form-check">
+						<input name="report" type="radio" class="radio1" id="report1_btn_202508061" value="202508061" />
+						<label class="form-check-label p-0" for="report1_btn_202508061"> Conveyance Bill Summary Report(202508061) </label>
+					</div>
+							
+			
+			</div>
+			<div class="col-sm-7">
+				<div class="form-group row m-0 mb-1 pl-3 pr-3">
+				<label for="group_for" class="col-sm-4 m-0 p-0 d-flex align-items-center">Employee Name:</label>
+					<div class="col-sm-8 p-0">
+						<select name="PBI_ID"  id="PBI_ID">
+						<option></option>
+						<?
+						if($_SESSION['employee_selected']==10001){
+							foreign_relation('personnel_basic_info','PBI_ID','PBI_NAME',$_POST['PBI_ID'],'1');
+						}else{
+							foreign_relation('personnel_basic_info','PBI_ID','PBI_NAME',$_POST['PBI_ID'],'PBI_ID="'.$_SESSION['employee_selected'].'"');
+						}
+						?>
+						</select>
+					</div>
+				</div>
+				
+				<div class="form-group row m-0 mb-1 pl-3 pr-3">
+				<label for="group_for" class="col-sm-4 m-0 p-0 d-flex align-items-center">Conveyance ID:</label>
+					<div class="col-sm-8 p-0">
+					<input  name="od_id" type="text" id="od_id" value="" />
+					
+					</div>
+				</div>
+				<div class="form-group row m-0 mb-1 pl-3 pr-3">
+				<label for="group_for" class="col-sm-4 m-0 p-0 d-flex align-items-center">Conveyance Type:</label>
+					<div class="col-sm-8 p-0">
+					<select name="type" id="type" class="form-control" >
+                        <option value="">Select Type</option>
+                        <option value="Food">Food</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Other">Other</option>
+                    </select>
+					</div>
+				</div>
+				<div class="form-group row m-0 mb-1 pl-3 pr-3">
+				<label for="group_for" class="col-sm-4 m-0 p-0 d-flex align-items-center">Means of Conveyance:</label>
+					<div class="col-sm-8 p-0">
+					 <select name="transport_type" id="transport_type" class="form-control">
+                        <option value="">Select Transport Type</option>
+                        <option value="Bus">Bus</option>
+                        <option value="CNG">CNG</option>
+                        <option value="Bike">Bike</option>
+                        <option value="Rickshaw">Rickshaw</option>
+                        <option value="Other">Other</option>
+                    </select>
+					</div>
+				</div>
+				<div class="form-group row m-0 mb-1 pl-3 pr-3">
+				<label for="group_for" class="col-sm-4 m-0 p-0 d-flex align-items-center">Customer Name:</label>
+					<div class="col-sm-8 p-0">
+					<select class="form-control req" name="project_id" id="project_id" >
+					  <option value="">Select Project Name</option>
+					  <? foreign_relation('crm_project_org','id','name',$project_id,'1'); ?>
+					</select>
+					</div>
+				</div>
+				<div class="form-group row m-0 mb-1 pl-3 pr-3">
+				<label for="group_for" class="col-sm-4 m-0 p-0 d-flex align-items-center">Status:</label>
+					<div class="col-sm-8 p-0">
+					<select name="status"  id="status">
+						<option value="">Select Status</option>
+						<?
+						
+							foreign_relation('bills_details','status','status',$_POST['status'],'1 group by status');
+					
+						?>
+						</select>
+					
+					</div>
+				</div>
+				
+				<div class="form-group row m-0 mb-1 pl-3 pr-3">
+				<label for="group_for" class="col-sm-4 m-0 p-0 d-flex align-items-center">Start Date:</label>
+					<div class="col-sm-8 p-0">
+					<input  name="f_date" type="text" id="f_date" value="<?=date('Y-m-01')?>" />
+					</div>
+				</div>
+				<div class="form-group row m-0 mb-1 pl-3 pr-3">
+				<label for="group_for" class="col-sm-4 m-0 p-0 d-flex align-items-center">End Date:</label>
+					<div class="col-sm-8 p-0">
+					<span class="oe_form_group_cell">
+					<input  name="t_date" type="text" id="t_date" value="<?=date('Y-m-d')?>" />
+					</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="n-form-btn-class">
+			<input name="submit" type="submit" class="btn1 btn1-bg-submit" value="Report" tabindex="6">
+		</div>
+	</form>
+</div>
+
+<?
+	require_once SERVER_CORE."routing/layout.bottom.php";
+	selected_two("#PBI_ID");
+?>

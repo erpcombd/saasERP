@@ -1,0 +1,465 @@
+<?php
+
+
+require_once "../../../controllers/routing/default_values.php";
+require_once SERVER_CORE."routing/layout.top.php";
+
+function auto_dropdown($sql){
+$res=db_query($sql);
+while($data=mysqli_fetch_row($res)){
+if($value==$data[0]) {echo '<option value="'.$data[0].'" selected>'.$data[1].'</option>';}
+else {echo '<option value="'.$data[0].'">'.$data[1].'</option>';}
+}}
+
+do_calander('#m_date');
+$head='<link href="../css/report_selection.css" type="text/css" rel="stylesheet"/>';
+auto_complete_from_db('personnel_basic_info','concat(PBI_NAME,"-",PBI_ID)','PBI_ID','','PBI_ID');
+$table='hrm_inout';
+$unique='id';
+
+if($_POST['mon']!=''){
+$mon=$_POST['mon'];}
+else{
+$mon=date('n');
+}
+
+
+if(isset($_POST["upload"]))
+{
+$year = $_POST['year'];
+$mon = $_POST['mon'];
+if($mon == 1)
+{
+$syear = $year - 1;
+$smon = 12;
+}
+else
+{
+$syear = $year;
+$smon =  $mon - 1;
+}
+
+$datetime = date('Y-m-d H:i:s');
+
+$start_date = $syear.'-'.sprintf("%02d", $smon).'-26';
+
+
+$startTime = $days1 = strtotime($start_date);
+$days_mon = date('t',$startTime);
+
+$end_date   = $year.'-'.sprintf("%02d", $mon).'-26';
+
+
+
+$endTime = $days2=mktime(0,0,0,$mon,26,$year);
+
+for ($i = $startTime; $i <= $endTime; $i = $i + 86400) {
+$day   = date('l',$i);
+${'day'.date('N',$i)}++;} 
+$r_count=${'day5'};
+$PBI_ORG = $_POST['PBI_ORG'];
+if($_POST['emp_id']>0) 	{$emp_id=$_POST['emp_id'];}
+
+if(isset($emp_id)){$emp_id_con=" and p.PBI_ID IN (".$_POST['emp_id'].")";}
+if($PBI_ORG>0) {$ORG_con = " and p.PBI_ORG='".$PBI_ORG."'";}
+
+
+
+$sql = "delete h.* FROM hrm_att_summary h, personnel_basic_info p
+WHERE p.PBI_ID=h.emp_id 
+and (p.employee_type = 'Roster' or p.employee_type = 'General Roster')
+and h.att_date BETWEEN '".$start_date."' AND '".$end_date."' 
+and iom_sl_no = 0 and leave_id = 0
+".$ORG_con.$emp_id_con."";
+$query = db_query($sql);
+
+
+
+
+$sql = "update hrm_att_summary h, personnel_basic_info p set h.deleted=0, h.panalty_leave_duration=0,late_min=0, grace_no=0, final_late_min=0, final_late_status=0
+WHERE p.PBI_ID=h.emp_id 
+and (p.employee_type = 'Roster' or p.employee_type = 'General Roster')
+and h.att_date BETWEEN '".$start_date."' AND '".$end_date."' 
+and (iom_sl_no > 0 or leave_id > 0)
+".$ORG_con.$emp_id_con."";
+$query = db_query($sql);
+
+
+$sql = "SELECT h.att_date,h.emp_id  FROM hrm_att_summary  h, personnel_basic_info p
+WHERE p.PBI_ID=h.emp_id 
+and 
+h.att_date BETWEEN '".$start_date."' AND '".$end_date."' 
+and (h.iom_sl_no > 0 or h.leave_id > 0)
+".$ORG_con.$emp_id_con."";
+$query = db_query($sql);
+	while($data = mysqli_fetch_object($query))
+	{
+	$dd[$data->emp_id][$data->att_date] = 1;
+	}
+
+
+$sql = "SELECT xenrollid , xdate , min(xtime) in_time,max(xtime) out_time, sc.office_start_time,sc.office_end_time, p.grace_type,sc.schedule_type
+FROM `hrm_attdump` h, hrm_machice_type m, personnel_basic_info p ,hrm_schedule_info sc,hrm_roster_allocation ro
+WHERE 
+h.xenrollid=ro.PBI_ID
+and (p.employee_type = 'Roster' or p.employee_type = 'General Roster')
+and h.xdate=ro.roster_date
+and sc.id=ro.shedule_1 
+and p.PBI_ID=h.xenrollid 
+and sc.schedule_type not in ('Holiday','Offday')
+and xdate BETWEEN '".$start_date."' AND '".$end_date."' 
+and h.xmechineid=m.mac_id 
+and m.mac_type!='Out' ".$ORG_con.$emp_id_con."
+GROUP BY xenrollid , xdate ";
+
+
+
+	$query = db_query($sql);
+	while($data = mysqli_fetch_object($query))
+	{
+	if($dd[$data->xenrollid][$data->xdate]==0){
+	$sl++;
+
+
+	$late_min[$sl] = 0;
+	$grace_no[$sl] = 0;
+	$final_late_min[$sl] = 0;
+	$final_late_status[$sl] = 0;
+	$process_time[$sl] = date('Y-m-d H:i:s');
+
+	$emp_ids[$sl] = $emp_id = $data->xenrollid;
+	$att_date[$sl] = $data->xdate;
+	$next_att_date[$sl] = date('Y-m-d',(strtotime($data->xdate) + 86400));
+	$in_time[$sl] = $data->in_time;
+	$grace_type_name[$sl] = $data->grace_type;
+	
+	$office_start_time[$sl] = $data->office_start_time;
+	$office_end_time[$sl] = $data->office_end_time;
+	$schedule_type[$sl] = $data->schedule_type;
+
+	}
+	}
+
+
+	
+    $sql = "SELECT xenrollid , xdate , max(xtime) out_time  
+	FROM `hrm_attdump` h, hrm_machice_type m,personnel_basic_info p
+	
+	WHERE p.PBI_ID=h.xenrollid 
+and (p.employee_type = 'Roster' or p.employee_type = 'General Roster')
+	and xdate BETWEEN '".$start_date."' AND '".$end_date."' 
+	and h.xmechineid=m.mac_id and m.mac_type!='In' 
+	".$ORG_con.$emp_id_con."
+	GROUP BY xenrollid,xdate";
+	
+	$query = db_query($sql);
+	while($data = mysqli_fetch_object($query))
+	{
+	$out_time[$data->xenrollid][$data->xdate] = $data->out_time;
+	$out_time2[$data->xenrollid][$data->xdate] = $data->out_time;
+	}
+	
+
+
+	
+	$sql = "SELECT xenrollid , xdate , min(xtime) in_time,  max(xtime) out_time, sc.office_start_time,sc.office_end_time
+	FROM hrm_attdump h, hrm_machice_type m,personnel_basic_info p, hrm_schedule_info sc, hrm_roster_allocation ro
+	
+	WHERE 
+	p.PBI_ID=h.xenrollid 
+	and p.PBI_ID=ro.PBI_ID
+	and h.xdate=ro.roster_date
+	and sc.id=ro.shedule_1 
+	and sc.schedule_type!='Regular'
+	and p.employee_type = 'Roster'
+	and xdate BETWEEN '".$start_date."' AND '".$end_date."' 
+	and h.xmechineid=m.mac_id 
+	and m.mac_type!='In' 
+	".$ORG_con.$emp_id_con."
+	GROUP BY xenrollid ,xdate ";
+	
+	$query = db_query($sql);
+	while($data = mysqli_fetch_object($query))
+	{
+	$in_time[$data->xenrollid][$data->xdate] = $data->in_time;
+	
+	$date = date('Y-m-d',(strtotime($data->xdate) - 86400));
+	if($data->out_time<$data->in_time){
+	$out_time[$data->xenrollid][$date] = $data->out_time;}
+	else{
+	$out_time[$data->xenrollid][$data->xdate] = $data->in_time;}
+	}
+	
+	
+
+		
+    $sql = "SELECT xenrollid , xdate , max(xtime) out_time  ,sc.office_start_time,sc.office_end_time
+	FROM hrm_attdump h, hrm_machice_type m,personnel_basic_info p, hrm_schedule_info sc, hrm_roster_allocation ro
+	
+	WHERE 
+	p.PBI_ID=h.xenrollid 
+	and h.xenrollid=ro.PBI_ID
+	and p.employee_type = 'Roster'
+	and p.PBI_ID=ro.PBI_ID
+	and h.xdate=ro.roster_date
+	and sc.id=ro.shedule_1 
+	and xtime < concat(h.xdate,' ',sc.office_start_time)
+	and xdate BETWEEN '".$start_date."' AND '".$end_date."' 
+	and h.xmechineid=m.mac_id 
+	and m.mac_type!='In' 
+	".$ORG_con.$emp_id_con."
+	GROUP BY xenrollid ,xdate ";
+	
+	$query = db_query($sql);
+	while($data = mysqli_fetch_object($query))
+	{
+	$date = date('Y-m-d',(strtotime($data->xdate) - 86400));
+	if($data->out_time<($data->xdate.' '.$data->office_start_time))
+
+	$out_time[$data->xenrollid][$date] = $data->out_time;
+	$out_time2[$data->xenrollid][$date] = $data->out_time;
+	
+	}
+	
+	
+	
+		$sql = "SELECT xenrollid , xdate , max(xtime) out_time  ,sc.office_start_time,sc.office_end_time
+	FROM hrm_attdump h, hrm_machice_type m,personnel_basic_info p, hrm_schedule_info sc, hrm_roster_allocation ro
+	
+	WHERE 
+	p.PBI_ID=h.xenrollid 
+	and p.PBI_ID=ro.PBI_ID
+	and h.xdate=ro.roster_date
+	and sc.id=ro.shedule_1 
+	and sc.schedule_type!='Regular'
+	and p.employee_type = 'Roster'
+	and xdate BETWEEN '".$start_date."' AND '".$end_date."' 
+	and h.xmechineid=m.mac_id 
+	and m.mac_type!='In' 
+	".$ORG_con.$emp_id_con."
+	GROUP BY xenrollid ,xdate ";
+	
+	$query = db_query($sql);
+	while($data = mysqli_fetch_object($query))
+	{
+	$date = date('Y-m-d',(strtotime($data->xdate) - 86400));
+
+	$out_time2[$data->xenrollid][$date] = $data->out_time;
+
+	}
+	
+for($x=1;$x<=$sl;$x++)
+{
+	if($office_end_time[$x]>$office_start_time[$x])
+	{
+		$exit_time[$x] = $out_time[$emp_ids[$x]][$att_date[$x]];
+		$sch_out[$x]   = $att_date[$x].' '.$office_end_time[$x];
+		if($sch_out[$x]>$exit_time[$x]) {$deleted[$x] = 1;}
+	}
+	
+	else
+	{
+		$exit_time[$x] = $out_time2[$emp_ids[$x]][$att_date[$x]];
+		$sch_out[$x]   = $next_att_date[$x].' '.$office_end_time[$x];
+		if($sch_out[$x]>$exit_time[$x]) {$deleted[$x] = 1;}
+	}
+
+}
+
+
+for($x=1;$x<=$sl;$x++)
+{
+if($deleted[$x] != 1 && $schedule_type[$x] == 'Regular'){
+	
+	$from_time  = strtotime($att_date[$x].' '.$office_start_time[$x]);
+	$entry_time = strtotime($in_time[$x]);
+	
+	$panalty_leave_duration[$x] = '0.0';
+	
+	if((($entry_time - $from_time)/60)>0){
+	$late_min[$x] = (($entry_time - $from_time)/60);}
+	else {$late_min[$x] = 0;}
+	
+		if($grace_type_name[$x] == 'Production Grace'){
+			if($late_min[$x]>10&&$late_min[$x]<60){
+			$panalty_leave_duration[$x] = '0.5';}
+			elseif($late_min[$x]>60){
+			$panalty_leave_duration[$x] = '1.0';}
+		}
+		elseif($grace_type_name[$x] == 'General Grace'&&$late_min[$x]>0&&$deleted[$x]==0)
+		{
+           
+					if($emp_ids[$x]==$old_emp_id) {$grace_noo++;}
+					else {$grace_noo=1;}
+					if($grace_noo<6) 
+					{
+					$grace_no[$x] = $grace_noo;
+					if($late_min[$x]<11)  
+					{
+					$final_late_min[$x] = 0; 
+					$final_late_status[$x] = 0;
+					}
+					else 
+					{
+					if($late_min[$x]>70) {$final_late_min[$x] = 60;}
+					else {$final_late_min[$x] = $late_min[$x] - 10;}
+					$final_late_status[$x] = 1;
+					}
+					} 
+					else 
+					{
+					$grace_no[$x] = 0;
+					if($late_min[$x]>0){	if($late_min[$x]>60) {$final_late_min[$x] = 60;} else {$final_late_min[$x] = $late_min[$x];} $final_late_status[$x] = 1;}
+					else 				    {$final_late_status[$x] = 0;}
+					}
+					$old_emp_id = $emp_ids[$x];
+		
+		}
+		elseif($grace_type_name[$x] == 'No Grace')
+		{if($late_min[$x]>0) {$deleted[$x] = 1;}}
+}
+if($grace_type_name[$x] == 'Single Punch Grace')
+		{$late_min[$x] = 0; $final_late_min[$x] = 0;$deleted[$x] = 0;}
+}
+
+
+
+for($x=1;$x<=$sl;$x++)
+{
+
+	$sql="INSERT INTO hrm_att_summary 
+	(emp_id, att_date, in_time,out_time, sch_in_time, sch_out_time,  dayname, 
+	panalty_leave_duration, deleted, late_min, grace_no, final_late_min, final_late_status, process_time)
+	VALUES 
+	('".$emp_ids[$x]."','".$att_date[$x]."', '".$in_time[$x]."','".$exit_time[$x]."','".$office_start_time[$x]."','".$office_end_time[$x]."', dayname('".$att_date[$x]."'), '".$panalty_leave_duration[$x]."','".$deleted[$x]."','".$late_min[$x]."','".$grace_no[$x]."','".$final_late_min[$x]."','".$final_late_status[$x]."','".$process_time[$x]."')";
+	
+	$query=db_query($sql);
+
+	//echo 'Complete';
+}
+// END 1
+}
+?>
+
+
+<style type="text/css">
+<!--
+.style1 {font-size: 24px}
+.style2 {
+	color: #FF66CC;
+	font-weight: bold;
+}
+-->
+</style>
+
+<div class="oe_view_manager oe_view_manager_current">
+<form action=""  method="post" enctype="multipart/form-data">
+<div class="oe_view_manager_body">
+<div  class="oe_view_manager_view_list"></div>
+<div class="oe_view_manager_view_form"><div style="opacity: 1;" class="oe_formview oe_view oe_form_editable">
+<div class="oe_form_buttons"></div>
+<div class="oe_form_sidebar"></div>
+<div class="oe_form_pager"></div>
+<div class="oe_form_container"><div class="oe_form">
+<div class="">
+<div class="oe_form_sheetbg">
+<div class="oe_form_sheet oe_form_sheet_width">
+<div  class="oe_view_manager_view_list"><div  class="oe_list oe_view">
+
+<table width="80%" border="1" align="center">
+<tr><td height="40" colspan="4" bgcolor="#00FF00"><div align="center" class="style1">Collect Attendance Information </div></td></tr>
+
+<tr>
+  <td>Employee Code </td>
+  <td colspan="3">
+  <input type="text" name="emp_id" id="emp_id" value="<?=$_POST['emp_id']?>" /></td>
+</tr>
+<tr>
+  <td>Company:</td>
+  <td colspan="3">
+<!--  <span class="oe_form_group_cell">
+    <select name="PBI_ORG" style="width:160px;" id="PBI_ORG">
+      <? foreign_relation('user_group','id','group_name',$PBI_ORG,'1 and id="'.$_SESSION['user']['group'].'"');?>
+    </select>
+  </span>-->
+<span class="oe_form_group_cell">
+<select name="PBI_ORG" style="width:160px;" id="PBI_ORG">
+  <option value="3">HFL</option>
+</select>
+</span></td>
+</tr>
+<tr>
+<td width="20%">Month :</td>
+<td colspan="3"><span class="oe_form_group_cell">
+<select name="mon" style="width:160px;" id="mon" required="required">
+
+
+<option value="1" <?=($mon=='1')?'selected':''?>>Jan</option>
+<option value="2" <?=($mon=='2')?'selected':''?>>Feb</option>
+<option value="3" <?=($mon=='3')?'selected':''?>>Mar</option>
+<option value="4" <?=($mon=='4')?'selected':''?>>Apr</option>
+<option value="5" <?=($mon=='5')?'selected':''?>>May</option>
+<option value="6" <?=($mon=='6')?'selected':''?>>Jun</option>
+<option value="7" <?=($mon=='7')?'selected':''?>>Jul</option>
+<option value="8" <?=($mon=='8')?'selected':''?>>Aug</option>
+<option value="9" <?=($mon=='9')?'selected':''?>>Sep</option>
+<option value="10" <?=($mon=='10')?'selected':''?>>Oct</option>
+<option value="11" <?=($mon=='11')?'selected':''?>>Nov</option>
+<option value="12" <?=($mon=='12')?'selected':''?>>Dec</option>
+
+          </select>
+                </span></td>
+                </tr>
+              <tr>
+                <td>Year :</td>
+                <td colspan="3"><select name="year" style="width:160px;" id="year" required="required">
+                 <option <?=($year=='2021')?'selected':''?>>2021</option>
+				  <option <?=($year=='2020')?'selected':''?>>2020</option>
+				  <option <?=($year=='2019')?'selected':''?>>2019</option>
+				  <option <?=($year=='2018')?'selected':''?>>2018</option>
+				  <option <?=($year=='2017')?'selected':''?>>2017</option>
+				  
+                </select></td>
+                </tr>
+              
+              <tr>
+
+                <td colspan="4">
+                  <div align="center">
+                    <input name="upload" type="submit" id="upload" value="Sync All Data" />
+                  </div></td>
+                </tr>
+
+
+              <tr>
+
+                <td colspan="4"><label>
+
+                    <div align="center">
+                      <p>&nbsp;</p>
+                      </div>
+
+                    </label></td>
+              </tr>
+            </table>
+
+            <br />
+          </div>
+          </div>
+
+          </div>
+
+    </div>
+
+<div class="oe_chatter"><div class="oe_followers oe_form_invisible">
+<div class="oe_follower_list"></div>
+</div></div></div></div></div>
+</div></div>
+</div>
+</form></div>
+
+
+
+<?
+require_once SERVER_CORE."routing/layout.bottom.php";
+?>

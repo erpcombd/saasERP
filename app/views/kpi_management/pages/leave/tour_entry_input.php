@@ -1,0 +1,214 @@
+<?php
+session_start();
+
+require "../../config/inc.all.php";
+
+// ::::: Edit This Section ::::: 
+$title='Official Tour Information';			// Page Name and Page Title
+$page="tour_entry.php";		// PHP File Name
+$input_page="tour_entry_input.php";
+$root='leave';
+
+$table='hrm_offical_tour';
+$unique='id';
+$shown='s_date';
+
+// ::::: End Edit Section :::::
+
+
+$crud      =new crud($table);
+
+$$unique = $_GET[$unique];
+if(isset($_POST[$shown]))
+{
+$$unique = $_POST[$unique];
+
+if(isset($_POST['insert'])||isset($_POST['insertn']))
+{		
+$now				= time();
+
+$crud->insert();
+$type=1;
+$msg='New Entry Successfully Inserted.';
+
+if(isset($_POST['insert']))
+{
+echo '<script type="text/javascript">
+parent.parent.document.location.href = "../'.$root.'/'.$page.'";
+</script>';
+}
+unset($_POST);
+unset($$unique);
+
+
+}
+
+
+//for Modify..................................
+
+if(isset($_POST['update']))
+{
+
+		$crud->update($unique);
+		$type=1;
+		$msg='Successfully Updated.';
+echo '<script type="text/javascript">parent.parent.document.location.href = "../'.$root.'/'.$page.'";</script>';
+}
+//for Delete..................................
+
+if(isset($_POST['delete']))
+{		$condition=$unique."=".$$unique;		$crud->delete($condition);
+		unset($$unique);
+		echo '<script type="text/javascript">
+parent.parent.document.location.href = "../'.$root.'/'.$page.'";
+</script>';
+		$type=1;
+		$msg='Successfully Deleted.';
+}
+}
+
+if(isset($$unique))
+{
+$condition=$unique."=".$$unique;
+$data=db_fetch_object($table,$condition);
+while (list($key, $value)=each($data))
+{ $$key=$value;}
+}
+if(!isset($$unique)) $$unique=db_last_insert_id($table,$unique);
+?>
+<html style="height: 100%;"><head>
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+        <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+        <link href="../../css/css.css" rel="stylesheet">
+
+
+<script type="text/javascript" src="../../js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="../../js/jquery-ui-1.8.2.custom.min.js"></script>
+<script type="text/javascript" src="../../js/jquery.ui.datepicker.js"></script>
+<script type="text/javascript" src="../../js/jquery.autocomplete.js"></script>
+<script type="text/javascript" src="../../js/jquery.validate.js"></script>
+<script type="text/javascript" src="../../js/paging.js"></script>
+<script type="text/javascript" src="../../js/ddaccordion.js"></script>
+<script type="text/javascript" src="../../js/js.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $("#e_date").change(function (){
+     var from_leave = $("#s_date").datepicker('getDate');
+     var to_leave = $("#e_date").datepicker('getDate');
+    var days   = ((to_leave - from_leave)/1000/60/60/24)+1;
+
+	if(days>0&&days<100){
+	$("#total_days").val(days);}
+  });
+      $("#s_date").change(function (){
+     var from_leave = $("#s_date").datepicker('getDate');
+     var to_leave = $("#e_date").datepicker('getDate');
+    var days   = ((to_leave - from_leave)/1000/60/60/24)+1;
+	if(days>0&&days<100){
+	$("#total_days").val(days);}
+  });
+    
+  
+});
+ 
+</script>
+<link href="../../css/report_selection.css" type="text/css" rel="stylesheet"/>
+        <? 
+do_calander('#s_date');
+do_calander('#e_date');
+
+auto_complete_from_db('personnel_basic_info','concat(PBI_NAME,"-",PBI_ID)','PBI_ID','','PBI_ID');?>
+        </head>
+<body>
+        <!--[if lte IE 8]>
+        <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+        <script>CFInstall.check({mode: "overlay"});</script>
+        <![endif]-->
+       <form action="" method="post"> <div class="ui-dialog ui-widget ui-widget-content ui-corner-all oe_act_window ui-draggable ui-resizable openerp" style="outline: 0px none; z-index: 1002; position: absolute; height: auto; width: 900px; display: block; /* [disabled]left: 217.5px; */ left: 16px; top: 21px;" tabindex="-1" role="dialog" aria-labelledby="ui-id-19">
+          <? include('../../common/title_bar_popup.php');?>
+      <div style="display: block; max-height: 464px; overflow-y: auto; width: auto; min-height: 82px; height: auto;" class="ui-dialog-content ui-widget-content" scrolltop="0" scrollleft="0">
+
+            <div style="width:100%" class="oe_popup_form">
+              <div class="oe_formview oe_view oe_form_editable" style="opacity: 1;">
+                <div class="oe_form_buttons"></div>
+                <div class="oe_form_sidebar" style="display: none;"></div>
+                <div class="oe_form_container">
+                  <div class="oe_form">
+                    <div class="">
+                      <? include('../../common/input_bar.php');?>
+                      <div class="oe_form_sheetbg">
+                        <div class="oe_form_sheet oe_form_sheet_width">
+        <table class="oe_form_group " border="0" cellpadding="0" cellspacing="0"><tbody><tr class="oe_form_group_row">
+            <td class="oe_form_group_cell"><table width="261" height="297" border="0" cellpadding="0" cellspacing="0" class="oe_form_group ">
+              <tbody>
+
+                         <tr>
+                <td width="20%" height="1" valign="middle"><div align="right">Employee Code : </div><input name="<?=$unique?>" id="<?=$unique?>" value="<?=$$unique?>" type="hidden" /></td>
+                <td width="82%" height="1" valign="middle"><input name="PBI_ID"  type="text" id="PBI_ID" size="10" onBlur="" tabindex="1" style="width:400px;" required value="<?=$PBI_ID?>" /></td>
+              </tr>
+              <tr>
+                <td height="1" align="right" valign="middle" bgcolor="#EBEBEB"><div align="right"> Type : </div></td>
+                <td height="1" valign="middle" bgcolor="#EBEBEB"><label>
+                  <select name="type" id="type">
+		  <option <?=($type=='Casual Leave')?'Selected':'';?>>Casual Leave</option>
+		  <option <?=($type=='Sick Leave')?'Selected':'';?>>Sick Leave</option>
+		  <option <?=($type=='Maternity Leave')?'Selected':'';?>>Maternity Leave</option>
+				  </select>
+                </label></td>
+              </tr>
+              <tr>
+                <td height="1" align="right" valign="middle"><div align="right"> Start Date :</div></td>
+                <td height="1" valign="middle"><input type="text" name="s_date" id="s_date" style="width:100px;" value="<?=$s_date?>" /></td>
+              </tr>
+              <tr>
+                <td height="1" align="right" valign="middle" bgcolor="#EBEBEB"><div align="right"> End Date :</div></td>
+                <td height="1" valign="middle" bgcolor="#EBEBEB"><input type="text" name="e_date" id="e_date" style="width:100px;" value="<?=$e_date?>" /></td>
+              </tr>
+              <tr>
+                <td height="1" valign="middle"><div align="right">Total  Days : </div></td>
+                <td height="1" valign="middle"><input type="text" name="total_days" id="total_days" style="width:100px;" readonly="" required="required" value="<?=$total_days?>" /></td>
+              </tr>
+              <tr>
+                <td height="1" valign="middle" bgcolor="#EBEBEB"><div align="right">Reason :</div></td>
+                <td height="1" valign="middle" bgcolor="#EBEBEB"><label>
+                  <input name="reason" type="text" id="reason" value="<?=$reason?>" />
+                </label></td>
+              </tr>
+              <tr>
+                <td height="1" valign="middle"><div align="right">Paid Status : </div></td>
+                <td height="1" valign="middle"><label>
+                  <select name="paid_status" id="paid_status">
+				  <option <?=($type=='Paid')?'Selected':'';?>>Paid</option>
+				  <option <?=($type=='Unpaid')?'Selected':'';?>>Unpaid</option>
+                  </select>
+                  </label></td>
+              </tr>
+                <tr class="oe_form_group_row">
+                  <td height="33" colspan="2" class="oe_form_group_cell oe_form_group_cell_label"></td>
+                  </tr>
+  </tbody></table>
+<p></p></td>
+            </tr></tbody></table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ui-resizable-handle ui-resizable-n" style="z-index: 1000;"></div>
+          <div class="ui-resizable-handle ui-resizable-e" style="z-index: 1000;"></div>
+          <div class="ui-resizable-handle ui-resizable-s" style="z-index: 1000;"></div>
+          <div class="ui-resizable-handle ui-resizable-w" style="z-index: 1000;"></div>
+          <div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se ui-icon-grip-diagonal-se" style="z-index: 1000;"></div>
+          <div class="ui-resizable-handle ui-resizable-sw" style="z-index: 1000;"></div>
+          <div class="ui-resizable-handle ui-resizable-ne" style="z-index: 1000;"></div>
+          <div class="ui-resizable-handle ui-resizable-nw" style="z-index: 1000;"></div>
+          <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+
+          </div>
+        </div>
+</form>
+</body></html>

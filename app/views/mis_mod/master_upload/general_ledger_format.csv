@@ -1,0 +1,3 @@
+sub_ledger_id,sub_ledger_name,tr_from,tr_id,ledger_name,group_for
+90000001,Al-Amin Insurance Company,Insurance_Company,5,Insurance Company,1
+90000002,Rohim Insurance,Insurance_Company,6,Insurance Company,1

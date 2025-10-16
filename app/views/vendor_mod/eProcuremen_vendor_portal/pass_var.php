@@ -1,0 +1,5 @@
+<?php
+
+$pvalue = 'password';
+
+?>

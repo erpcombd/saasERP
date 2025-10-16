@@ -1,0 +1,1718 @@
+<?php
+
+  $sql = 'SELECT currency_id FROM rfq_multiple_currency WHERE rfq_no = "'.$_SESSION[$unique].'"';
+  $qry = db_query($sql);
+  $selected_currency_ids = array();
+  while($row=mysqli_fetch_object($qry)){
+	
+	$selected_currency_ids[] = $row->currency_id;
+  }
+?>
+<script type="text/javascript" src="../../../../public/assets/js/select2.min.js"></script>
+<style>
+  .select2-container .select2-selection--multiple .select2-selection__rendered {
+    display: flex;
+    list-style: none;
+    padding: 0;
+}
+.select2-selection__choice{
+  display: flex;
+  margin: 4px;
+  flex-direction: row-reverse;
+}
+[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+    cursor: pointer;
+    border:none;
+}
+</style>
+<style>
+.nav-tabs .nav-item .nav-link, .nav-tabs .nav-item .nav-link:hover, .nav-tabs .nav-item .nav-link:focus {
+    border: 0 !important;
+    color: #007bff !important;
+    font-weight: 500;
+}
+
+
+.sidebar, .sidemenu{
+	display:none;
+    width: 0% !important;
+}
+
+.main_content{
+	width: 100% !important;
+}
+
+.nav-tabs{
+	border-bottom: 1px solid #d9d9d9;
+	
+	background-color: #f9f9f994;
+}
+
+.tab-content>.active {
+    display: block;
+    border: 1px solid #f5f5f5;
+
+	background-color: #fffffffb;
+}
+
+.nav-tabs .nav-item .nav-link.active{
+    border: 1px solid #e1e1e1 !important;
+    border-radius: 5px 5px 0px 0px;
+    border-bottom: 1px solid #f8f8ff !important;
+	color: #121089 !important;
+}
+.nav-tabs .nav-item .nav-link:hover{
+    border: 1px solid #e1e1e1 !important;
+    border-radius: 5px 5px 0px 0px;
+    border-bottom: 1px solid #f8f8ff !important;
+}
+
+.attachments .tr .td1{
+	width:21%;
+	padding-left:15px;
+	text-align:left;
+	font-weight:bold;
+}
+.attachments .tr .td2{
+	width:79%;
+	text-align:left;
+}
+
+.tr .td1{
+	width:30%;
+	text-align:right;
+	font-weight:bold;
+}
+.tr .td2{
+	width:70%;
+	text-align:left;
+	padding-left:6px;
+}
+tr:nth-child(even) {
+    background-color: #fffffffb!important;
+	color: #333 !important;
+}
+
+tr:nth-child(odd) {
+    background-color: #fffffffb !important;
+    color: #333 !important;
+}
+
+.attachment-toggle-add-file {
+  font-size: 32px;
+  color: dimgray;
+  
+  border: 0;
+  outline: none;
+}
+
+.attachment-toggle .attachment-toggle-add-file.icon-close {
+  display: none;
+}
+
+.attachment-toggle.opened .attachment-toggle-add-file.icon-search {
+  display: none;
+}
+
+.attachment-toggle.opened .attachment-toggle-add-file.icon-close {
+  display: block;
+}
+
+.search-container {
+  position: relative;
+  transition: all 0.3s;
+  max-height: 0;
+  overflow: hidden;
+  background-color: 'red';
+  padding: 12px;
+}
+
+.fileuploadcontaineropened{
+	display: block !important;
+}
+.fileuploadcontainerclosed{
+	display: block;
+}
+
+.search-container.opened {
+  max-height: 100px;
+  background-color: 'red';
+}
+
+.search-container input[type="text"] {
+  outline: none;
+  font-size: 1.6rem;
+  margin: 18px;
+  width: 300px;
+  background-color: inherit;
+  border: 0;
+}
+
+.search-container .attachment-toggle-add-file {
+  vertical-align: middle;
+}
+
+
+.container {
+  position: relative;
+  margin-top: 50px;
+}
+
+.fileuploadcontainer,.attachmenturluploadcontainer,.attachmenttextuploadcontainer,.internalfileuploadcontainereventinfo,.fileuploadcontainereventinfo,.internalattachmenturluploadcontainereventinfo,.attachmenturluploadcontainereventinfo,.internalattachmenttextuploadcontainereventinfo,.attachmenttextuploadcontainereventinfo{
+	margin: 15px;
+	display: none;
+}
+
+
+.fileuploadcontainer form,.attachmenturluploadcontainer form,.attachmenttextuploadcontainer form ,.internalfileuploadcontainereventinfo,.fileuploadcontainereventinfo form,.internalattachmenttextuploadcontainereventinfo,.attachmenttextuploadcontainereventinfo form,.internalattachmenturluploadcontainereventinfo,.attachmenturluploadcontainereventinfo form{
+  
+  border: 0.1px solid  #333;
+  padding: 12px;
+}
+
+input[type=file]{
+  margin-right: 20px;
+  border: none;
+  background-color: #084cdf;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  background-color:#0d45a5;
+  
+}
+.drop-area2{
+	border: 2px dashed red;
+    display: flex;
+    justify-content: center;
+    align-items: ce;
+
+	
+}
+
+input[type=file]:hover {
+  background-color: #0d45a5;
+  
+}
+
+
+.lds-spinner {
+  color: official;
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  transform: scale(0.35);
+}
+.lds-spinner div {
+  transform-origin: 40px 40px;
+  animation: lds-spinner 1.2s linear infinite;
+}
+.lds-spinner div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 3px;
+  left: 37px;
+  width: 6px;
+  height: 18px;
+  border-radius: 20%;
+  background-color: #4b4c4c;
+}
+.lds-spinner div:nth-child(1) {
+  transform: rotate(0deg);
+  animation-delay: -1.1s;
+}
+.lds-spinner div:nth-child(2) {
+  transform: rotate(30deg);
+  animation-delay: -1s;
+}
+.lds-spinner div:nth-child(3) {
+  transform: rotate(60deg);
+  animation-delay: -0.9s;
+}
+.lds-spinner div:nth-child(4) {
+  transform: rotate(90deg);
+  animation-delay: -0.8s;
+}
+.lds-spinner div:nth-child(5) {
+  transform: rotate(120deg);
+  animation-delay: -0.7s;
+}
+.lds-spinner div:nth-child(6) {
+  transform: rotate(150deg);
+  animation-delay: -0.6s;
+}
+.lds-spinner div:nth-child(7) {
+  transform: rotate(180deg);
+  animation-delay: -0.5s;
+}
+.lds-spinner div:nth-child(8) {
+  transform: rotate(210deg);
+  animation-delay: -0.4s;
+}
+.lds-spinner div:nth-child(9) {
+  transform: rotate(240deg);
+  animation-delay: -0.3s;
+}
+.lds-spinner div:nth-child(10) {
+  transform: rotate(270deg);
+  animation-delay: -0.2s;
+}
+.lds-spinner div:nth-child(11) {
+  transform: rotate(300deg);
+  animation-delay: -0.1s;
+}
+.lds-spinner div:nth-child(12) {
+  transform: rotate(330deg);
+  animation-delay: 0s;
+}
+@keyframes lds-spinner {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.attachmenturluploadcontainer,.attachmenttextuploadcontainer,.internalfileuploadcontainereventinfo,.fileuploadcontainereventinfo {
+    position: relative;
+}
+.fileuploadcontainer {
+    position: relative;
+}
+
+.attachment-icon-close-container {
+    position: absolute;
+    right: 0;
+    top: 7;
+    transform: translateY(-50%);
+}
+
+.triangle {
+    position: relative;
+    float: left;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+.triangle-right {
+    border-width: 50px 0 50px 50px;
+    border-color: transparent transparent transparent #dfe3e3;
+}
+
+</style>
+
+<div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="settings-tab">
+<div class="row m-0 p-0 pt-4">
+  <div class="col-sm-8 col-8 col-lg-8 col-md-8 d-flex  align-items-center">
+   <?php
+    $csql = 'select * from user_group where 1';
+	$cqry = db_query($csql);
+	while($cdata=mysqli_fetch_object($cqry)){
+    $group_check = find_a_field('rfq_group_for','group_for','rfq_no="'.$_SESSION[$unique].'" and group_for="'.$cdata->id.'"');
+   ?>
+   
+   <input type="checkbox" name="group_for" id="group_for" <?=($group_check==$cdata->id)?'checked':''?> value="<?=$cdata->id?>" onchange="company_setup(this.value)" />
+   <lebel class="pr-3 pl-1"><?=$cdata->group_name?></lebel>
+   <? } ?>
+  </div>
+  <div class="col-sm-4 col-4 col-lg-4 col-md-4 d-flex justify-content-end align-items-center"> 
+	<div></div>
+	<div>			
+				<form  id="uploadlogobasicsourcing" enctype="multipart/form-data">
+												<input type="hidden" name="rfq_no" value="<?=$_SESSION[$unique]?>">
+												<input type="hidden" name="tr_from" value="logo">
+												<input type="hidden" name="entry_by" value="<?=$_SESSION['user']['id']?>">
+												
+												<?
+										
+												    $imgsrc="../../../controllers/utilities/api_upload_attachment_show.php?name=default_logo.png&folder=logo";
+													$sql = 'SELECT * FROM rfq_documents_information WHERE rfq_no = "'.$_SESSION[$unique].'" AND tr_from ="logo"';
+													$qry = db_query($sql);
+													$item = mysqli_fetch_object($qry); 
+													if ($item) {
+														
+														$imgsrc="../../../controllers/utilities/api_upload_attachment_show.php?name=".$item->new_name."&folder=".$item->tr_from;
+													}
+                                                   
+													
+													?>
+												<label for="basicsourcinglogo" class="btn m-0 p-0 " id="group_for_logo">
+													<img alt="" id="logoshowbasicsourcing" src="<?=$imgsrc?>" style="width: 100%; max-height: 80px;mix-blend-mode: multiply;"/>
+												</label>
+												<input class="d-none" type="file" name="eprocfiles[]" id="basicsourcinglogo" accept="*/*">
+												<div   id="filepercentageandloaderbuyer" class="filepercentageandloaderbuyer" style="display: none !important;">
+												  </div>
+											
+											     <button type="submit" class="d-none"  name="submit" value="Go" class="attachment-toggle-add-file"><em class="fa fa-fw fa-search"></em></button>
+											
+				</form>
+	</div>
+
+  
+  
+  </div>
+  </div>
+
+
+
+
+
+  <div class="row m-0 p-0">
+  	<div class="col-6 pt-4 pb-4">
+		<h1 class="h1 m-0 p-0 pl-3"><em class="fa-solid fa-file-lines"></em> Basic Settings.. </h1>
+		<hr class="m-3" />
+		
+		<table class="w-100">
+			<tr class="tr">
+				<td class="td1 req-input">Event Name<input type="hidden" name="new_rfq_no" id="new_rfq_no" value="<?=$_SESSION[$unique]?>" /></td>
+				<td class="td2"><input name="event_name" type="text" id="event_name" autocomplete="on" value="<?=$event_name?>" onchange="master_data(this.name,this.value)" /><input name="<?=$unique?>" type="hidden" id="<?=$unique?>" value="" /></td>
+			</tr>
+			
+			<tr class="tr">
+				<td class="td1">Currency</td>
+				<td class="td2">
+					<div class="input-group mb-3">
+					  <select type="text" class="form-control" id="currency" name="currency" value="<?=$currency?>" list="currencyList" onchange="master_data(this.name,this.value);currency_show(this.value)" />
+					  <!--<datalist id="currencyList">-->
+					   <? foreign_relation('currency_info','currency','currency',$currency,"1")?>
+					  <!--<datalist>-->
+					  </select>
+					  <!--<div class="input-group-append"><span class="input-group-text" id="basic-addon2">BDT</span></div>-->
+					</div>	
+					</td>
+			</tr>
+						
+			<tr class="tr">
+				<td class="td1"></td>
+				<td class="td2" colspan="10">
+
+				<div class="attachment-toggle">
+											<? if($_SESSION['master_status']=='MANUAL'){?>
+								                   
+								                                <span class="attachment-toggle-add-file icon-search fs-14" style="cursor: pointer; color: blue;" onmouseover="this.style.color='orange'" onmouseout="this.style.color='blue'">File</span>
+																<div class="vertical-line" style="height: 20px; width: 1px; background-color: #000; display: inline-block; vertical-align: middle;"></div>
+																<span class="attachment-toggle-add-url icon-search" style="cursor: pointer; color: blue;" onmouseover="this.style.color='orange'" onmouseout="this.style.color='blue'">Url</span>
+																<div class="vertical-line" style="height: 20px; width: 1px; background-color: #000; display: inline-block; vertical-align: middle;"></div>
+																<span class="attachment-toggle-add-text icon-search" style="cursor: pointer; color: blue;" onmouseover="this.style.color='orange'" onmouseout="this.style.color='blue'">Text</span>
+										     	<? } ?>
+										  
+										  <div class="fileuploadcontainer" >
+														
+												<form  id="attachmentuploadFormxx" enctype="multipart/form-data">
+												<input type="hidden" name="rfq_no" value="<?=$_SESSION[$unique]?>">
+												<input type="hidden" name="tr_from" value="sourcing_basic_settings">
+												<input type="hidden" name="entry_by" value="<?=$_SESSION['user']['id']?>">
+												<input type="hidden" name="motherContainer" value="fileuploadcontainer">
+												<input type="hidden" name="datashowContainer" value="attachmentshowcontainer">
+												<div class="attachment-icon-close-container">
+												  <em class="attachment-toggle-add-file fa fa-fw fa-close"></em>
+												</div>
+												<div id="dropArea" class="drop-area">
+												
+												<input  type="file" name="eprocfiles[]" id="imageInput" accept="*/*" multiple>
+												  <div id="filepercentageandloader" class="filepercentageandloader" style="display: none !important;">
+												  </div>
+												  
+										  
+												<div class="drop-area2">
+												  <div>
+												  <p class="m-0">Drag & Drop files here</p>
+												  <em class="fa-solid fa-cloud-arrow-up fa-2xl"></em>
+												  </div>
+												
+												</div>
+												
+											  </div>
+											  <input type="checkbox" name="sendtosuppliercheckbox" id="sendtosuppliercheckbox" checked>
+												<label for="sendtosuppliercheckbox">Send to Supplier</label>
+												  <button type="submit" class="d-none"  name="submit" value="Go" class="attachment-toggle-add-file"><em class="fa fa-fw fa-search"></em></button>
+												
+												</form>
+										  </div>
+															
+															<div class="attachmenturluploadcontainer" >
+														
+																<form  id="attachmenturluploadForm1" enctype="multipart/form-data">
+																<input type="hidden" name="rfq_no" value="<?=$_SESSION[$unique]?>">
+																<input type="hidden" name="tr_from" value="sourcing_basic_settings">
+																<input type="hidden" name="entry_by" value="<?=$_SESSION['user']['id']?>">
+																<input type="hidden" name="motherContainer" value="ttttttttttt">
+																<input type="hidden" name="datashowContainer" value="attachmentUrlshowcontainer">
+																
+																<div class="attachment-icon-close-container">
+																	<em class="attachment-toggle-add-url fa fa-fw fa-close"></em>
+																</div>
+																
+																<p>Add Your URL here</p>
+																<input  type="text" name="attachmenturlinput" id="attachmenturlinput">
+																
+																<input type="checkbox" name="sendtosuppliercheckbox" id="sendtosuppliercheckbox" checked>
+																   <label for="sendtosuppliercheckbox">Send to Supplier</label><br>
+																  <button type="submit"  name="submit" value="Go" class="attachment-toggle-add-file btn btn-info">ADD</button>
+																
+																</form>
+															</div>
+											  <div class="attachmenttextuploadcontainer" >
+														
+												<form  id="attachmenttextuploadForm" enctype="multipart/form-data">
+												<input type="hidden" name="rfq_no" value="<?=$_SESSION[$unique]?>">
+												<input type="hidden" name="tr_from" value="sourcing_basic_settings">
+												<input type="hidden" name="entry_by" value="<?=$_SESSION['user']['id']?>">
+												<input type="hidden" name="motherContainer" value="attachmenttextuploadcontainer">
+												<input type="hidden" name="datashowContainer" value="attachmentTextshowcontainer">
+												
+												<div class="attachment-icon-close-container">
+												  <em class="attachment-toggle-add-text fa fa-fw fa-close"></em>
+												</div> 
+												
+												<p>Add Your Text here</p>
+												<!-- <textarea name="attachmenttextinput" id="attachmenttextinput" rows="10"></textarea> -->
+												<textarea name="attachmenttextinput" id="attachmenttextinput" rows="10"></textarea>
+												
+												<input type="checkbox" name="sendtosuppliercheckbox" id="sendtosuppliercheckbox" checked>
+												  <label for="sendtosuppliercheckbox">Send to Supplier</label><br>
+												  <button type="submit"  name="submit" value="Go" class="attachment-toggle-add-file btn btn-info">ADD</button>
+												
+												</form>
+											</div>
+											<div class="attachmentshowcontainer container row m-0" >
+
+											<p id="attachmentsLabel" style="width:100%;  display: none; font-weight: bold;text-align:center;">Attachments</p>
+                        <?
+						  $sql = 'SELECT * FROM rfq_documents_information WHERE rfq_no = "'.$_SESSION[$unique].'" AND tr_from ="sourcing_basic_settings"';
+						  $qry = db_query($sql);
+						  if (mysqli_num_rows($qry)) {
+							echo '<script>document.getElementById("attachmentsLabel").style.display = "block";</script>';
+						}
+						  while($item=mysqli_fetch_object($qry)){
+						?>
+                                      <div class="col-sm-10 col-md-10 col-lg-10 pb-1">
+										<div class="rounded p-2" style="background-color: #f7f7f7 !important; border: 1px solid #e6e6e6!important; ">
+										<a href="../../../controllers/utilities/api_upload_attachment_show.php?name=<?=$item->new_name?>&folder=<?=$item->tr_from?>&original_name=<?=$item->original_name?>" target="_blank" rel="noopener">
+												<em class="fa-solid fa-file fa-2xl fs-22" style="color: #d6960a;"></em> 
+												<span><?=$item->original_name?></span>
+											</a>
+											<? if($_SESSION['master_status']=='MANUAL'){?>
+											<button type="button" style=" display: inline !important;" class="border-0" onclick="deleteAttachmentseventinfo(this,
+                                   '<?=$item->attachment_id;?>',
+                                   '<?=$item->rfq_no;?>',
+                                   '<?=$item->tr_from;?>',
+                                   '<?=$item->entry_by;?>',
+                                   '<?=$motherContainerValue;?>',
+                                   '<?=$datashowContainerValue;?>')">
+								           
+												<em class="fa-solid fa-xmark"></em>
+											</button>
+											<? } ?>
+										</div>
+									</div>
+
+
+
+                       <? } ?>
+						</div>
+											  <div class="attachmentUrlshowcontainer container row m-0">
+											  <p id="attachmentsUrlLabel" style="width:100%;  display: none; font-weight: bold;text-align:center;">Urls</p>
+											   <? attachment_url_show('sourcing_basic_settings')?>
+								
+											  </div>
+											  <div class="attachmentTextshowcontainer container row m-0">
+											  <p id="attachmentsTextLabel" style="width:100%;  display: none; font-weight: bold;text-align:center;">Texts</p>
+                                                 <? attachment_text_show('sourcing_basic_settings') ;?>
+											  
+											  </div>
+</div>
+				</td>
+                 
+			</tr>
+					
+			</tr>
+		</table>
+		
+	</div>
+	
+	<div class="col-6  pt-4 pb-4">
+		<h1 class="h1 m-0 p-0 pl-3"><em class="fa-solid fa-file-lines"></em> Terms and Conditions </h1>
+		<hr class="m-3" />
+		
+		<table class="w-100">
+			<tr class="tr">
+				<td class="td1">Event Terms</td>
+				<td class="td2">
+				<div class="attachment-toggle">
+								
+											<? if($_SESSION['master_status']=='MANUAL'){?>
+								<span class="attachment-toggle-add-file icon-search fs-14" style="cursor: pointer; color: blue;" onmouseover="this.style.color='orange'" onmouseout="this.style.color='blue'">File</span>
+																<div class="vertical-line" style="height: 20px; width: 1px; background-color: #000; display: inline-block; vertical-align: middle;"></div>
+																<span class="attachment-toggle-add-url icon-search" style="cursor: pointer; color: blue;" onmouseover="this.style.color='orange'" onmouseout="this.style.color='blue'">Url</span>
+																<div class="vertical-line" style="height: 20px; width: 1px; background-color: #000; display: inline-block; vertical-align: middle;"></div>
+																<span class="attachment-toggle-add-text icon-search" style="cursor: pointer; color: blue;" onmouseover="this.style.color='orange'" onmouseout="this.style.color='blue'">Text</span>
+																	<? } ?>
+										  
+										  
+										  <div class="fileuploadcontainer" >
+														
+												<form  id="attachmentuploadFormxx" enctype="multipart/form-data">
+												<input type="hidden" name="rfq_no" value="<?=$_SESSION[$unique]?>">
+												<input type="hidden" name="tr_from" value="sourcing_terms_condition">
+												<input type="hidden" name="entry_by" value="<?=$_SESSION['user']['id']?>">
+												<input type="hidden" name="motherContainer" value="fileuploadcontainer">
+												<input type="hidden" name="datashowContainer" value="attachmentshowcontainer">
+												<div class="attachment-icon-close-container">
+												  <em class="attachment-toggle-add-file fa fa-fw fa-close"></em>
+												</div>
+												<div id="dropArea" class="drop-area">
+												
+												<input  type="file" name="eprocfiles[]" id="imageInput" accept="*/*" multiple>
+												  <div   id="filepercentageandloader" class="filepercentageandloader" style="display: none !important;">
+												  </div>
+												  
+										  
+												<div class="drop-area2">
+												  <div  >
+												  <p class="m-0">Drag & Drop files here</p>
+												  <em class="fa-light fa-cloud-arrow-up fa-2xl"></em>
+												  </div>
+												
+												</div>
+												
+											  </div>
+											  <input type="checkbox" name="sendtosuppliercheckbox" id="sendtosuppliercheckbox" checked>
+												<label for="sendtosuppliercheckbox">Send to Supplier</label>
+												  <button type="submit" class="d-none"  name="submit" value="Go" class="attachment-toggle-add-file"><em class="fa fa-fw fa-search"></em></button>
+												
+												</form>
+										  </div>
+															
+															<div class="attachmenturluploadcontainer" >
+														
+																<form  id="attachmenturluploadForm1" enctype="multipart/form-data">
+																<input type="hidden" name="rfq_no" value="<?=$_SESSION[$unique]?>">
+																<input type="hidden" name="tr_from" value="sourcing_terms_condition">
+																<input type="hidden" name="entry_by" value="<?=$_SESSION['user']['id']?>">
+																<input type="hidden" name="motherContainer" value="ttttttttttt">
+																<input type="hidden" name="datashowContainer" value="attachmentUrlshowcontainer">
+																
+																<div class="attachment-icon-close-container">
+																	<em class="attachment-toggle-add-url fa fa-fw fa-close"></em>
+																</div>
+																
+																<p>Add Your URL here</p>
+																<input  type="text" name="attachmenturlinput" id="attachmenturlinput">
+																
+																<input type="checkbox" name="sendtosuppliercheckbox" id="sendtosuppliercheckbox" checked>
+																   <label for="sendtosuppliercheckbox">Send to Supplier</label><br>
+																  <button type="submit"  name="submit" value="Go" class="attachment-toggle-add-file btn btn-info">ADD</button>
+																
+																</form>
+															</div>
+											  <div class="attachmenttextuploadcontainer" >
+														
+												<form  id="attachmenttextuploadForm" enctype="multipart/form-data">
+												<input type="hidden" name="rfq_no" value="<?=$_SESSION[$unique]?>">
+												<input type="hidden" name="tr_from" value="sourcing_terms_condition">
+												<input type="hidden" name="entry_by" value="<?=$_SESSION['user']['id']?>">
+												<input type="hidden" name="motherContainer" value="attachmenttextuploadcontainer">
+												<input type="hidden" name="datashowContainer" value="attachmentTextshowcontainer">
+												
+												<div class="attachment-icon-close-container">
+												  <em class="attachment-toggle-add-text fa fa-fw fa-close"></em>
+												</div> 
+												
+												<p>Add Your Text here</p>
+												<textarea name="attachmenttextinput" id="attachmenttextinput" rows="10"></textarea>
+												
+												<input type="checkbox" name="sendtosuppliercheckbox" id="sendtosuppliercheckbox" checked>
+												  <label for="sendtosuppliercheckbox">Send to Supplier</label><br>
+												  <button type="submit"  name="submit" value="Go" class="attachment-toggle-add-file btn btn-info">ADD</button>
+												
+												</form>
+											</div>
+											<div class="attachmentshowcontainer container row m-0">
+											<p id="attachmentsLabelsourcing_terms_condition" style="width:100%;  display: none; font-weight: bold;text-align:center;">Attachments:</p>
+                        <?
+						  $sql = 'SELECT * FROM rfq_documents_information WHERE rfq_no = "'.$_SESSION[$unique].'" AND tr_from ="sourcing_terms_condition"';
+						  $qry = db_query($sql);
+						  if (mysqli_num_rows($qry)) {
+							echo '<script>document.getElementById("attachmentsLabelsourcing_terms_condition").style.display = "block";</script>';
+						}
+						  while($item=mysqli_fetch_object($qry)){
+						?>
+                                      <div class="col-sm-10 col-md-10 col-lg-10 pb-1">
+										<div class="rounded p-2" style="background-color: #f7f7f7 !important; border: 1px solid #e6e6e6!important; ">
+										<a href="../../../controllers/utilities/api_upload_attachment_show.php?name=<?=$item->new_name?>&folder=<?=$item->tr_from?>&original_name=<?=$item->original_name?>" target="_blank" rel="noopener">
+
+												<em class="fa-solid fa-file fa-2xl fs-22" style="color: #d6960a;"></em> 
+												<span><?=$item->original_name?></span>
+											</a>
+											<? if($_SESSION['master_status']=='MANUAL'){?>
+											<button type="button" style=" display: inline !important;" class="border-0" onclick="deleteAttachmentseventinfo(this,
+                                   '<?=$item->attachment_id;?>',
+                                   '<?=$item->rfq_no;?>',
+                                   '<?=$item->tr_from;?>',
+                                   '<?=$item->entry_by;?>',
+                                   '<?=$motherContainerValue;?>',
+                                   '<?=$datashowContainerValue;?>')">
+												<em class="fa-solid fa-xmark"></em>
+											</button>
+											<? } ?>
+										</div>
+									</div>
+
+
+
+                       <?}?>
+						</div>
+											  <div class="attachmentUrlshowcontainer container row m-0">
+											  <p id="attachmentsUrlLabelsourcing_terms_condition" style="width:100%;  display: none; font-weight: bold;text-align:center;">Urls</p>
+                                                  <? attachment_url_show('sourcing_terms_condition')?>
+											  </div>
+											  <div class="attachmentTextshowcontainer container row m-0">
+											  <p id="attachmentsTextLabelsourcing_terms_condition" style="width:100%;  display: none; font-weight: bold;text-align:center;">Text</p>
+											   <? attachment_text_show('sourcing_terms_condition') ;?>
+											  </div>
+</div>
+				</td>
+			</tr>
+		</table>
+	
+	
+	
+		<h1 class="h1 m-0 p-0 pl-3 pt-3"><em class="fa-solid fa-file-lines"></em> Documents </h1>
+		<hr class="m-3" />
+		
+		<table class="w-100">
+			<tr class="tr">
+				<td>&nbsp;&nbsp;Related Documents</td>
+			</tr>
+			
+			<?php
+				 if($master_rfq_no==0){
+				  $sql = 'select * from rfq_master where master_rfq_no="'.$_SESSION[$unique].'"';
+				  $qry = db_query($sql);
+				  while($round_info = mysqli_fetch_object($qry)){
+				  ?>
+				  <tr class="tr">
+				   <td>&nbsp;&nbsp;<a href="?old_rfq_no=<?=url_encode($round_info->rfq_no)?>"><?=$round_info->rfq_version?></a></td>
+			      </tr>
+				  
+				  <?
+				  }
+				 }else{
+					$sql = 'select * from rfq_master where master_rfq_no="'.$master_rfq_no.'"';
+					$qry = db_query($sql);
+					while($round_info = mysqli_fetch_object($qry)){
+					?>
+					<?if($round_info->rfq_no !=$_SESSION[$unique]){?>
+					<tr class="tr">
+					 <td>&nbsp;&nbsp;<a href="?old_rfq_no=<?=url_encode($round_info->rfq_no)?>"><?=$round_info->rfq_version?></a></td>
+					</tr>
+					<?}?>
+					
+					<?
+					}
+				 
+				  $sql = 'select * from rfq_master where rfq_no="'.$master_rfq_no.'"';
+				  $qry = db_query($sql);
+				  while($round_info = mysqli_fetch_object($qry)){
+				  ?>
+				  <tr class="tr">
+				   <td>&nbsp;&nbsp;<a href="?old_rfq_no=<?=url_encode($round_info->rfq_no)?>"><?=$round_info->rfq_version?></a></td>
+			      </tr>
+				  
+				  <?
+				  }
+				 }
+				?>
+				
+		</table>
+	
+		
+		<h1 class="h1 m-0 p-0 pl-3 pt-3"><em class="fa-solid fa-file-lines"></em> Custom Objects </h1>
+		<hr class="m-3" />
+		
+		<table class="w-100">
+			<tr class="tr">
+				<td colspan="2" class="td2">None</td>
+			</tr>
+		</table>
+	
+	
+	</div>
+  </div>
+  
+
+<div class="row m-0 p-0 pt-4">
+  	<div class="col-6 pt-4 pb-4">
+		<h1 class="h1 m-0 p-0 pl-3"><em class="fa-solid fa-file-lines"></em> Internal Event Info </h1>
+		<hr class="m-3" />
+		
+		<table class="w-100">
+			<tr class="tr">
+
+				<td class="td1">Tag</td>
+				<td class="td2"><input type="text" class="tag" id="tag" name="tag" value="<?=$tag?>" onchange="master_data(this.name,this.value)" autocomplete="on" /></td>
+			</tr>
+			
+			<tr class="tr">
+				<td class="td1  req-input">Event Commodity</td>
+				<td class="td2"><select type="text" class="commodity" autocomplete="off" id="commodity" name="commodity" list="eventCommodityList" value="<?=$commodity?>" onchange="subComodity(this.value);" />
+				<!--<datalist id="eventCommodityList">-->
+				  <option></option>
+				   <? foreign_relation('event_commodity','event_commodity','event_commodity',$commodity,"1 order by event_commodity asc")?> 
+				<!--<datalist>-->
+				</select>
+				</td>
+			</tr>
+						
+			<tr class="tr">
+				<td class="td1  req-input">Event sub commodity</td>
+				<td class="td2"><input type="text" class="coupa_commodity" id="coupa_commodity" name="coupa_commodity" autocomplete="off" value="<?=$coupa_commodity?>" list="comidityList" onchange="master_data(this.name,this.value)" />
+				     <datalist id="comidityList">
+					   <? foreign_relation('event_sub_commodity','event_sub_commodity','""',$coupa_commodity,"1")?>
+					  <datalist>
+					  </td>
+			</tr>
+						
+			<!-- <tr class="tr">
+				<td class="td1">Planned Savings</td>
+				<td class="td2">
+					<div class="input-group mb-1">
+					  <input type="text" class="form-control" id="planned_savings" name="planned_savings" value="<?//=$planned_savings?>" placeholder="0.00" onchange="master_data(this.name,this.value)" />
+					  
+					  <div class="input-group-append" style=" height: 30px; padding-top: 5px; ">
+						<span class="input-group-text p-0" id="planned_savings">
+						 <select type="text" class="form-control" id="planned_savings_currency" name="planned_savings_currency" value="<?//=$planned_savings_currency?>" list="currencyList" onchange="master_data(this.name,this.value)" placeholder="Currency.." />
+					  <datalist id="planned_savings_currencyList">
+					   <? //foreign_relation('currency_info','currency','currency',$planned_savings_currency,"1")?>
+					  
+						</span>
+					  </div>
+					</div> 
+				</td>
+			</tr> -->
+			<tr class="tr">
+				<td class="td1">Project Lead</td>
+				<td class="td2"> <input type="text"  class="project_lead" id="project_lead" name="project_lead" value="<?=$project_lead?>" onchange="master_data(this.name,this.value)" /> </td>
+			</tr>
+
+			<tr class="tr">
+				<td class="td1">Capex/Opex</td>
+				<td class="td2">
+				
+					<select id="capex_opex" name="capex_opex"  onchange="master_data(this.name,this.value)"  list="priorityList">
+					<option value=""></option>
+					<option <?if($capex_opex=='Capex'){echo 'selected';}?> value="Capex">Capex</option>
+					<option <?if($capex_opex=='Opex'){echo 'selected';}?> value="Opex">Opex</option>
+					<option <?if($capex_opex=='Both'){echo 'selected';}?> value="Both">Both</option>
+					  
+					 
+					</select>
+				
+				</td>
+			</tr>
+									
+			<tr class="tr">
+				<td class="td1">Savings Type</td>
+				<td class="td2">
+				
+					<select id="cost_avoidance" name="cost_avoidance"  onchange="master_data(this.name,this.value)"  list="costAvoidanceList">
+					<option></option>
+					  
+					  <? foreign_relation('cost_avoidance','cost_avoidance','cost_avoidance',$cost_avoidance,"1")?>
+					</select>
+				
+				</td>
+			</tr>
+									
+			<tr class="tr">
+				<td class="td1  req-input">Sourcing Type</td>
+				<td class="td2">
+					<select id="sourcing_type" name="sourcing_type" onchange="master_data(this.name,this.value)">
+					<option></option>
+					  
+					  <? foreign_relation('sourcing_type','sourcing_type','sourcing_type',$sourcing_type,"1")?>
+					</select>
+				
+				</td>
+			</tr>
+									
+			<tr class="tr">
+				<td class="td1 req-input">RFQ Reference #</td>
+				<td class="td2"> <input type="text" class="rfx_referance" id="rfx_referance" name="rfx_referance" value="<?=$rfx_referance?>" onchange="master_data(this.name,this.value)" /> </td>
+			</tr>
+									
+			<tr class="tr">
+				<td class="td1  req-input">SRP Case Number</td>
+				<td class="td2"> <input type="text" class="referance_form" id="referance_form" name="referance_form" value="<?=$referance_form?>" onchange="master_data(this.name,this.value)" /> </td>
+			</tr>
+			<tr class="tr">
+				<td class="td1">Request Recieved Date</td>
+				<td class="td2"> <input type="date"  class="request_recieved_date" id="request_recieved_date" name="request_recieved_date" value="<?=$request_recieved_date?>" onchange="master_data(this.name,this.value)" /> </td>
+			</tr>
+			<tr class="tr">
+				<td class="td1  req-input">final request recieved date</td>
+				<td class="td2"> <input type="date"  class="final_request_recieved_date" id="final_request_recieved_date" name="final_request_recieved_date" value="<?=$final_request_recieved_date?>" onchange="master_data(this.name,this.value)" /> </td>
+			</tr>
+			<tr class="tr">
+				<td class="td1  ">Planned Timeline in Calender days</td>
+				<td class="td2"> <input type="text"  class="planned_timeline_days" id="planned_timeline_days" name="planned_timeline_days" value="<?=$planned_timeline_days?>" onchange="master_data(this.name,this.value)" /> </td>
+			</tr>
+			<tr class="tr">
+				<td class="td1">Priority</td>
+				<td class="td2">
+				
+					<select id="priority" name="priority"  onchange="master_data(this.name,this.value)"  list="priorityList">
+					<option <?if($priority=='Regular'){echo 'selected';}?> value="Regular">Regular</option>
+					<option <?if($priority=='Modarate'){echo 'selected';}?> value="Modarate">Modarate</option>
+					<option <?if($priority=='High'){echo 'selected';}?> value="High">High</option>
+					  
+					 
+					</select>
+				
+				</td>
+			</tr>
+									
+			<tr class="tr">
+				<td class="td1  req-input">Project Amount</td>
+				<td class="td2">
+					<div class="input-group mb-1">
+					  <input type="text" class="form-control" id="project_amount" name="project_amount" value="<?=$project_amount?>" onchange="master_data(this.name,this.value)" placeholder="0.00" />
+					  <div class="input-group-append" style=" height: 30px; padding-top: 5px; ">
+						<span class="input-group-text p-0" id="project_amount_c">
+						<select type="text" class="form-control" id="project_amount_currency" name="project_amount_currency" value="<?=$project_amount_currency?>" list="project_amount_currencyList" onchange="master_data(this.name,this.value)" placeholder="Currency.." />
+					  <!--<datalist id="project_amount_currencyList">-->
+					   <? foreign_relation('currency_info','currency','currency',$project_amount_currency,"1")?>
+					  <!--<datalist>-->
+					  </select>
+					  </span>
+					  </div>
+					</div>
+				 </td>
+			</tr>
+									
+			<tr class="tr">
+				<td class="td1">Attachment </td>
+				<td class="td2">
+				<div class="attachment-toggle">
+											<? if($_SESSION['master_status']=='MANUAL'){?>
+								
+								<span class="attachment-toggle-add-file icon-search fs-14" style="cursor: pointer; color: blue;" onmouseover="this.style.color='orange'" onmouseout="this.style.color='blue'">File</span>
+																<div class="vertical-line" style="height: 20px; width: 1px; background-color: #000; display: inline-block; vertical-align: middle;"></div>
+																<span class="attachment-toggle-add-url icon-search" style="cursor: pointer; color: blue;" onmouseover="this.style.color='orange'" onmouseout="this.style.color='blue'">Url</span>
+																<div class="vertical-line" style="height: 20px; width: 1px; background-color: #000; display: inline-block; vertical-align: middle;"></div>
+																<span class="attachment-toggle-add-text icon-search" style="cursor: pointer; color: blue;" onmouseover="this.style.color='orange'" onmouseout="this.style.color='blue'">Text</span>
+										  
+										  	<? } ?>
+										  <div class="fileuploadcontainer" >
+														
+												<form  id="attachmentuploadFormxx" enctype="multipart/form-data">
+												<input type="hidden" name="rfq_no" value="<?=$_SESSION[$unique]?>">
+												<input type="hidden" name="tr_from" value="sourcing_internel_eventinfo">
+												<input type="hidden" name="entry_by" value="<?=$_SESSION['user']['id']?>">
+												<input type="hidden" name="motherContainer" value="fileuploadcontainer">
+												<input type="hidden" name="datashowContainer" value="attachmentshowcontainer">
+												<div class="attachment-icon-close-container">
+												  <em class="attachment-toggle-add-file fa fa-fw fa-close"></em>
+												</div>
+												<div id="dropArea" class="drop-area">
+												
+												<input  type="file" name="eprocfiles[]" id="imageInput" accept="*/*" multiple>
+												  <div   id="filepercentageandloader" class="filepercentageandloader" style="display: none !important;">
+												  </div>
+												  
+										  
+												<div class="drop-area2">
+												  <div  >
+												  <p class="m-0">Drag & Drop files here</p>
+												  <em class="fa-light fa-cloud-arrow-up fa-2xl"></em>
+												  </div>
+												</div>
+												
+											  </div>
+											  <input type="checkbox" name="sendtosuppliercheckbox" id="sendtosuppliercheckbox" checked>
+												<label for="sendtosuppliercheckbox">Send to Supplier</label>
+												  <button type="submit" class="d-none"  name="submit" value="Go" class="attachment-toggle-add-file"><em class="fa fa-fw fa-search"></em></button>
+												
+												</form>
+										  </div>
+															
+															<div class="attachmenturluploadcontainer" >
+														
+																<form  id="attachmenturluploadForm1" enctype="multipart/form-data">
+																<input type="hidden" name="rfq_no" value="<?=$_SESSION[$unique]?>">
+																<input type="hidden" name="tr_from" value="sourcing_internel_eventinfo">
+																<input type="hidden" name="entry_by" value="<?=$_SESSION['user']['id']?>">
+																<input type="hidden" name="motherContainer" value="ttttttttttt">
+																<input type="hidden" name="datashowContainer" value="attachmentUrlshowcontainer">
+																
+																<div class="attachment-icon-close-container">
+																	<em class="attachment-toggle-add-url fa fa-fw fa-close"></em>
+																</div>
+																
+																<p>Add Your URL here</p>
+																<input  type="text" name="attachmenturlinput" id="attachmenturlinput">
+																
+																<input type="checkbox" name="sendtosuppliercheckbox" id="sendtosuppliercheckbox" checked>
+																   <label for="sendtosuppliercheckbox">Send to Supplier</label><br>
+																  <button type="submit"  name="submit" value="Go" class="attachment-toggle-add-file btn btn-info">ADD</button>
+																
+																</form>
+															</div>
+											  <div class="attachmenttextuploadcontainer" >
+														
+												<form  id="attachmenttextuploadForm" enctype="multipart/form-data">
+												<input type="hidden" name="rfq_no" value="<?=$_SESSION[$unique]?>">
+												<input type="hidden" name="tr_from" value="sourcing_internel_eventinfo">
+												<input type="hidden" name="entry_by" value="<?=$_SESSION['user']['id']?>">
+												<input type="hidden" name="motherContainer" value="attachmenttextuploadcontainer">
+												<input type="hidden" name="datashowContainer" value="attachmentTextshowcontainer">
+												
+												<div class="attachment-icon-close-container">
+												  <em class="attachment-toggle-add-text fa fa-fw fa-close"></em>
+												</div> 
+												
+												<p>Add Your Text here</p>
+												<textarea name="attachmenttextinput" id="attachmenttextinput" rows="10"></textarea>
+												
+												<input type="checkbox" name="sendtosuppliercheckbox" id="sendtosuppliercheckbox" checked>
+												  <label for="sendtosuppliercheckbox">Send to Supplier</label><br>
+												  <button type="submit"  name="submit" value="Go" class="attachment-toggle-add-file btn btn-info">ADD</button>
+												
+												</form>
+											</div>
+											<div class="attachmentshowcontainer container row m-0">
+												<div>
+                                                      <p id="attachmentsLabelsourcing_internel_eventinfo" style="width:100%;  display: none; font-weight: bold;text-align:center;">Attachments:</p>
+												</div>
+												<div>
+
+												</div>
+											
+                        <?
+						  $sql = 'SELECT * FROM rfq_documents_information WHERE rfq_no = "'.$_SESSION[$unique].'" AND tr_from ="sourcing_internel_eventinfo"';
+						  $qry = db_query($sql);
+						  if (mysqli_num_rows($qry)) {
+							echo '<script>document.getElementById("attachmentsLabelsourcing_internel_eventinfo").style.display = "block";</script>';
+						}
+						  while($item=mysqli_fetch_object($qry)){
+
+						?>
+                                      <div class="col-sm-10 col-md-10 col-lg-10 pb-1">
+										<div class="rounded p-2" style="background-color: #f7f7f7 !important; border: 1px solid #e6e6e6!important; ">
+										<a href="../../../controllers/utilities/api_upload_attachment_show.php?name=<?=$item->new_name?>&folder=<?=$item->tr_from?>&original_name=<?=$item->original_name?>" target="_blank" rel="noopener">
+
+												<em class="fa-light fa-file fa-2xl fs-22" style="color: #d6960a;"></em> 
+												<span><?=$item->original_name?></span>
+											</a>
+											<? if($_SESSION['master_status']=='MANUAL'){?>
+											<button type="button" style=" display: inline !important;" class="border-0" onclick="deleteAttachmentseventinfo(this,
+                                   '<?=$item->attachment_id;?>',
+                                   '<?=$item->rfq_no;?>',
+                                   '<?=$item->tr_from;?>',
+                                   '<?=$item->entry_by;?>',
+                                   '<?=$motherContainerValue;?>',
+                                   '<?=$datashowContainerValue;?>')">
+												<em class="fa-solid fa-xmark"></em>
+											</button>
+											<? } ?>
+										</div>
+									</div>
+
+
+
+                       <? } ?>
+						</div>
+											  <div class="attachmentUrlshowcontainer container row m-0">
+											  <p id="attachmentsUrlLabelsourcing_internel_eventinfo" style="width:100%;  display: none; font-weight: bold;text-align:center;">Urls</p>
+                                                 <? attachment_url_show('sourcing_internel_eventinfo')?>
+											  
+											  </div>
+											  <div class="attachmentTextshowcontainer container row m-0">
+											  <p id="attachmentsTextLabelsourcing_internel_eventinfo" style="width:100%;  display: none; font-weight: bold;text-align:center;">Text</p>
+
+											   <? attachment_text_show('sourcing_internel_eventinfo') ;?>
+											  </div>
+</div>
+				</td>
+			</tr>																	
+			<tr class="tr">
+				<td class="td1">Other Notes/Comments</td>
+				<td class="td2"><textarea id="other_notes" name="other_notes" onchange="master_data(this.name,this.value)"><?=$other_notes?></textarea>	 </td>
+			</tr>
+												
+			
+			
+			
+		</table>
+		
+	</div>
+	
+	<div class="col-6  pt-4 pb-4">
+		<h1 class="h1 m-0 p-0 pl-3"><em class="fa-solid fa-file-lines"></em> Event Team </h1>
+		
+					  
+					 
+		<hr class="m-3" />
+					<? if($_SESSION['master_status']=='MANUAL'){?>
+		<div class="row" style="margin-bottom:10px">
+			<div class=" req-input" style="width:30% !important; text-align:center">Visibility: </div>
+			<div style="width:50%; float:left">
+			<select id="content_group" name="content_group"  onchange="visibility(this.value)">
+			  <option></option>
+			  <option value="All" <? if($content_group=='All') echo 'selected'; ?> >All</option>
+			   <? foreign_relation('event_visibility_team','id','team',$content_group,'1');?>
+			 </select>
+			 </div>
+		</div>
+			<? } ?>
+		
+		
+		<input class="form-control" list="event_team_user_ids" id="event_team_user_id" name="event_team_user_id" style="width:50% !important; float:left;" placeholder="..Select Team Member..">
+		<datalist id="event_team_user_ids">
+		<?php foreign_relation('user_activity_management','concat(user_id,"::",fname)','""','1');?>
+		</datalist>
+		
+		<select class="form-control" id="event_team_level" name="event_team_level" style="width:20% !important; float:left;">
+		<option></option>
+		<option <?=($event_team_level=='Watcher')?'selected':''?>>Watcher</option>
+		<option <?=($event_team_level=='Evaluator')?'selected':''?>>Evaluator</option>
+		<option <?=($event_team_level=='Owner')?'selected':''?>>Owner</option>
+		</select>
+		
+		<? if($_SESSION['master_status']=='MANUAL'){?><button type="button" name="add_event_team" class="btn1 btn1-bg-update" style="width:20% !important;" onclick="event_team_insert(document.getElementById('new_rfq_no').value,document.getElementById('event_team_user_id').value,document.getElementById('event_team_level').value)">Add Team</button><? } ?><br />
+		<br />
+		<span id="team">
+		<?php
+		 $sql = 'select a.id,u.fname,a.action,a.is_master from rfq_evaluation_team a, user_activity_management u where a.user_id=u.user_id and a.rfq_no="'.$_SESSION[$unique].'"';
+		 $qry = db_query($sql);
+		 while($data=mysqli_fetch_object($qry)){
+		?>
+		<a class="pl-3"><em class="fa-regular fa-user"></em>&nbsp;<?=$data->fname?><span>(<?=$data->action?>)</span> </a><? if($_SESSION['master_status']=='MANUAL' && $data->is_master!='Yes'){?><button type="button" name="add_event_team" 
+		class="btn2 btn1-bg-cancel" onclick="event_team_cancel(document.getElementById('new_rfq_no').value,<?=$data->id?>)">x</button><? } ?><br />
+		<? } ?>
+	</span>
+	
+		<h1 class="h1 m-0 p-0 pl-3 pt-4"><em class="fa-solid fa-list"></em> Projects and Tasks </h1>
+		<hr class="m-3" />
+		
+		<table class="w-100">
+			<tr class="tr">
+				<td class="td1">Related Documents</td>
+				<td class="td2">None</td>
+			</tr>
+		</table>
+	   
+	
+	</div>
+  </div>
+  
+  
+  
+  
+
+  
+<div class="row m-0 p-0 pt-4">
+  	<div class="col-12 pt-4 pb-4">
+		<h1 class="h1 m-0 p-0 pl-3"><em class="fa-solid fa-file-lines"></em> Event Type Settings </h1>
+		<hr class="m-3" />
+		
+		<div class="row m-0 p-0 pt-4">
+			<div class="col-6  p-0">
+				
+				  <input type="checkbox" id="vehicle1" name="vehicle1" checked="checked" value="Bike" onchange="master_data(this.name,this.value)">
+					<label for="vehicle1">RFx / Auction Stage</label><br>
+					
+					
+					&nbsp; &nbsp; <input type="radio" id="rfx_stage" name="rfx_stage" <?php if($rfx_stage=='RFI') {echo 'checked';}?> value="RFI" onchange="master_data(this.name,this.value);auctionTermsFunc(this.value)">
+					<label for="rfi">RFI</label><br>
+					&nbsp; &nbsp; <input type="radio" id="rfx_stage" name="rfx_stage" <?php if($rfx_stage=='RFQ') {echo 'checked';}?> value="RFQ" onchange="master_data(this.name,this.value);auctionTermsFunc(this.value)">
+					<label for="rfq">RFQ</label><br>
+					&nbsp; &nbsp;
+					<input type="radio" id="radio" name="rfx_stage" <?php if($rfx_stage=='RFP') {echo 'checked';}?> value="RFP" onchange="master_data(this.name,this.value);auctionTermsFunc(this.value)" />
+					<label for="rfp">RFP</label><br>
+					
+					&nbsp; &nbsp; <input type="radio" id="rfx_stage" name="rfx_stage" <?php if($rfx_stage=='Auction') {echo 'checked';}?> value="Auction" onchange="master_data(this.name,this.value);auctionTermsFunc(this.value)">
+					<label for="rfp">Reverse Auction</label><br>
+					
+					&nbsp; &nbsp; <input type="radio" id="rfx_stage" name="rfx_stage" <?php if($rfx_stage=='Forward Auction') {echo 'checked';}?> value="Forward Auction" onchange="master_data(this.name,this.value);auctionTermsFunc(this.value)">
+					<label for="rfp">Forward Auction</label>
+				
+				
+					 <br>  
+					 <!-- <input type="checkbox" id="auction_stage" name="auction_stage" <?php if($auction_stage=='yes') {echo 'checked';}?> value="yes" onchange="master_data(this.name,this.value)">
+					<label for="auction_stage">Auction Stage</label><br>
+					
+					
+										
+					&nbsp; &nbsp; <input type="radio" id="reverse_auction" name="reverse_auction" <?php if($reverse_auction=='Auction') {echo 'checked';}?> value="Auction" onchange="master_data(this.name,this.value)">
+					<label for="rfi">Auction</label><br>
+					&nbsp; &nbsp; <input type="radio" id="reverse_auction" name="reverse_auction" <?php if($reverse_auction=='ForwardAuction') {echo 'checked';}?> 
+					value="ForwardAuction" onchange="master_data(this.name,this.value)">
+					<label for="rfq">Forward Auction</label><br> -->
+<script>
+	function runnigTimeVisible(val){
+		if(val=='serial'){
+			document.getElementById("runningTime").style.display="";
+		}else{
+			document.getElementById("runningTime").style.display="none";
+		}
+	}
+	
+	function auctionTermsFunc(val){
+	   
+		if(val=='Auction' || val=='Forward Auction'){
+			document.getElementById("auctionTerms").style.display="";
+		}else{
+			document.getElementById("auctionTerms").style.display="none";
+		}
+	}
+</script>				
+		<?php //if($rfx_stage=='Forward Auction' || $rfx_stage=='Auction'){ ?>
+				
+				  <h1 class="h1 m-0 p-0 pb-1 pt-4">Reverse Auction Terms & Conditions </h1>
+				  
+				  <table id="auctionTerms" style="<?php if($rfx_stage=='Forward Auction' || $rfx_stage=='Auction'){ }else{ echo 'display:none'; } ?>">
+						<tr class="tr">
+							<td class=""><label for="rfi">Specify how item bidding will begin and end:</label><abbr title="Parallel - Bidder can bid in parallel for any item at any time during auction period   Serial – Bidder must bid one by one serially during auction period"><em class="fa-solid fa-circle-exclamation"></em></abbr></td>
+							<td class="">
+							
+								<select id="lot_bidding" style="width:110px !important" name="lot_bidding"  onchange="master_data(this.name,this.value); runnigTimeVisible(this.value)" >
+									<option tittle="Parallel - Bidder can bid in parallel for any item at any time during auction period" <? if($lot_bidding=='parallel'){ echo 'selected';}?> value="parallel">Parallel</option>
+									<option <? if($lot_bidding=='serial'){ echo 'selected';}?> value="serial">Serial</option>
+								</select>							</td>
+						</tr>
+						
+						<tr class="tr" style="<?php if($lot_bidding=='serial'){ }else{ echo 'display:none'; }?>" id="runningTime">
+							<td class=""><label for="rfi">Running time for each item (minutes):</label></td>
+							<td class=""><input type="number" id="running_time" name="running_time"  value="<?=$running_time?>" onchange="master_data(this.name,this.value)" style="width:110px !important" /><abbr title="Running time for each item (minutes)"><em class="fa-solid fa-circle-exclamation"></em></abbr></td>
+						</tr>
+						
+						<tr class="tr">
+							<td class=""><label for="rfi">Bid rank that triggers overtime :</label><abbr title="If specific rank (e.g., 1, 2 or 3) is changed, it will trigger overtime of bid"><em class="fa-solid fa-circle-exclamation"></em></abbr></td>
+							<td class="">
+							<select id="rank_tringgers_overtime" style="width:110px !important" name="rank_tringgers_overtime"  onchange="master_data(this.name,this.value); runnigTimeVisible(this.value)" >
+								    <option value=""></option>
+									<option  <? if($rank_tringgers_overtime=='1'){ echo 'selected';}?> value="1">Rank 1</option>
+									<option <? if($rank_tringgers_overtime=='2'){ echo 'selected';}?> value="2"> Rank 1 & 2</option>
+									<option <? if($rank_tringgers_overtime=='3'){ echo 'selected';}?> value="3">Rank 1, 2 & 3</option>
+							</select>								</td>
+						</tr>
+						<tr class="tr">
+							<td class=""><label for="rfi">Start overtime if bid submitted within minutes (minutes):</label><abbr title="Time will auto extend If any change in rank(s) specified above, within provided the time in minutes."><em class="fa-solid fa-circle-exclamation"></em></abbr></td>
+							<td class="">
+								<input type="number" id="submitted_within_minutes" name="submitted_within_minutes"  value="<?=$submitted_within_minutes?>" onchange="master_data(this.name,this.value)" style="width:110px !important" />							</td>
+						</tr>
+						<tr class="tr">
+							<td class=""><label for="rfi">Overtime period (minutes):</label><abbr title="How long the bid will extend if the above criteria is met"><em class="fa-solid fa-circle-exclamation"></em></abbr></td>
+							<td class="">
+								<input type="number" id="overtime_period" name="overtime_period"  value="<?=$overtime_period?>" onchange="master_data(this.name,this.value)" style="width:110px !important" />							</td>
+						</tr>
+						
+						<tr class="tr">
+							<td class=""><label for="rfi">Improve bid amount by (amount):</label><abbr title="Bid must be reduced minimum amount mentioned here."><em class="fa-solid fa-circle-exclamation"></em></abbr></td>
+							<td class="">
+								<input type="number" id="improve_bid_amt" name="improve_bid_amt"  value="<?=$improve_bid_amt?>" onchange="master_data(this.name,this.value)" style="width:110px !important" />							</td>
+						</tr>
+						
+						<tr class="tr">
+							<td class=""><label for="rfi">Can participate submit tie bids:</label><abbr title="Bidders can submit same bids"><em class="fa-solid fa-circle-exclamation"></em></abbr></td>
+							<td class="">
+							
+								<select id="tie_bids" style="width:110px !important" name="tie_bids"  onchange="master_data(this.name,this.value)" >
+									<option></option>
+									<option <? if($tie_bids=='yes'){ echo 'selected';}?> value="yes">Yes</option>
+									<option <? if($tie_bids=='no'){ echo 'selected';}?> value="no">No</option>
+								</select>							</td>
+						</tr>
+						
+						<!-- <tr class="tr">
+							<td class=""><label for="rfi">Require participant to give a reason for declining a bid:</label></td>
+							<td class="">
+							
+								<select id="reason_for_declining" style="width:110px !important" name="reason_for_declining"  onchange="master_data(this.name,this.value)" >
+									<option></option>
+									<option <? if($reason_for_declining=='yes'){ echo 'selected';}?> value="yes">Yes</option>
+									<option <? if($reason_for_declining=='no'){ echo 'selected';}?> value="no">No</option>
+								</select>
+							
+							</td>
+						</tr> -->
+						
+						<!-- <tr class="tr">
+							<td class=""><label for="rfi">Specify how participants view min price:</label></td>
+							<td class="">
+								<select id="how_view_min_price" style="width:110px !important" name="how_view_min_price"  onchange="master_data(this.name,this.value)" >
+									<option></option>
+									
+								</select>
+							</td>
+						</tr> -->
+						
+						<tr class="tr">
+							<td class=""><label for="rfi">Show participants responses to other participants:</label></td>
+							<td class="">
+							
+								<select id="show_responses_to_others" style="width:110px !important" name="show_responses_to_others"  onchange="master_data(this.name,this.value)" >
+									<option></option>
+									<option <? if($show_responses_to_others=='yes'){ echo 'selected';}?> value="yes">Yes</option>
+									<option <? if($show_responses_to_others=='no'){ echo 'selected';}?> value="no">No</option>
+								</select>							</td>
+						</tr>
+						
+						<tr class="tr">
+							<td class=""><label for="rfi">Show lead bid to the all participants:</label></td>
+							<td class="">
+							
+								<select id="show_lead_bid" style="width:110px !important" name="show_lead_bid"  onchange="master_data(this.name,this.value)" >
+									<option></option>
+									<option <? if($show_lead_bid=='yes'){ echo 'selected';}?> value="yes">Yes</option>
+									<option <? if($show_lead_bid=='no'){ echo 'selected';}?> value="no">No</option>
+								</select>							</td>
+						</tr>
+						<tr class="tr">
+							<td class=""><label for="rfi">Restrict bid submission if bid is reduced by more than %</label></td>
+							<td class="">
+								<input type="number" id="bid_improve_warning_percentage" name="bid_improve_warning_percentage"  value="<?=$bid_improve_warning_percentage?>" onchange="master_data(this.name,this.value)" style="width:110px !important" />							</td>
+						</tr>
+						
+						<!-- <tr class="tr">
+							<td class=""><label for="rfi">Ceiling or Initial bid (Amount):</label></td>
+							<td class="">
+								<input type="text" id="initial_bid" name="initial_bid"  value="<?=$initial_bid?>" onchange="master_data(this.name,this.value)" style="width:110px !important" />
+							</td>
+						</tr>
+						
+						<tr class="tr">
+							<td class=""><label for="rfi">Historical amount:</label></td>
+							<td class="">
+								<input type="text" id="historical_amt" name="historical_amt"  value="<?=$historical_amt?>" onchange="master_data(this.name,this.value)" style="width:110px !important" />
+							</td>
+						</tr> -->
+				  </table>
+				  
+		<?php //} ?>
+
+				  <!-- <input type="checkbox" id="" name="" value="">
+				  <label for="">1 Terms and Conditions</label><br>
+				  <input type="checkbox" id="" name="" value="">
+				  <label for="">2 Terms and Conditions</label><br>
+				  <input type="checkbox" id="" name="" value="">
+				  <label for="">3 Terms and Conditions</label><br>
+				  <input type="checkbox" id="" name="" value="">
+				  <label for="">4 Terms and Conditions</label><br> -->
+				
+				
+			</div>	
+			<div class="col-6 p-0">
+				
+				  <input type="checkbox" id="multiple_response" name="multiple_response" <?php if($multiple_response=='yes') {echo 'checked';}else{echo '';}?> 
+				  value="<?php if($multiple_response=='yes') {echo 'no';}else{echo 'yes';}?>" onchange="master_data(this.name,this.value)">
+					<label for="vehicle">Allow multiple response</label><br>
+					
+					<input type="checkbox" id="hide_supplier_response" name="hide_supplier_response" <?php if($hide_supplier_response=='yes') {echo 'checked';}else{echo 'checked';}?> value="yes" onchange="master_data(this.name,this.value)">
+					<label for="ve3">Hide supplier response (sealed bid)</label><br>
+					
+					&nbsp; &nbsp; <input type="radio" id="when_unseal" name="when_unseal" <?php if($when_unseal=='after_event_ends') {echo 'checked';}?> value="after_event_ends"
+					onchange="master_data(this.name,this.value); " >
+					<label for="unseal">Automatically unseal when event ends</label>
+					<br>
+					
+					&nbsp; &nbsp; <input type="radio" id="when_unseal" name="when_unseal" <?php if($when_unseal=='manually') {echo 'checked';}else{echo '';}?> value="manually" onchange="master_data(this.name,this.value)">
+					<label for="Unseal">Unseal manually</label><br>
+					
+		
+					 <br>  
+				  <input type="checkbox" id="respond_with_att_chat" name="respond_with_att_chat" <?php if($respond_with_att_chat=='yes') {echo 'checked';}?> value="yes" onchange="master_data(this.name,this.value)">
+				  <label for="vehicle14">Allow Suppliers to respond with attachments in Massage centre</label><br>
+				
+				
+				
+				
+					
+				<h1 class="h1 m-0 p-0 pb-1 pt-4"> Event Currencies & Exchange Rates <em class="fa-solid fa-circle-exclamation"></em> </h1>
+
+				  <input type="checkbox" id="other_currency" name="other_currency" <?php if($other_currency=='yes') {echo 'checked';}?> value="yes" onchange="master_data(this.name,this.value)">
+				  <label for="v001">Allow Suppliers to bid in any of these currencies</label><br>
+				  <div id="hiddenDiv" <?php if($other_currency != 'yes') {?> style="display:none" <? } ?> >
+						
+				            <h1 class="h1 m-0 p-0 pb-1 pt-4"> Select your currency <em class="fa-solid fa-circle-exclamation"></em> </h1>
+						    <span id="showcurrencymmmm"></span>
+							<select class="form-select" id="multiple-select-field" data-placeholder="Select your currency" multiple>
+							<? foreign_relation('currency_info','id','currency',$planned_savings_currency,"1")?>
+							</select>
+						
+				  </div>
+				  
+		
+			</div>
+		</div>		
+	</div>
+  </div>
+  
+  <script>
+  // Get the checkbox element
+  var other_currency = document.getElementById('other_currency');
+
+  // Get the div element to show/hide
+  var hiddenDiv = document.getElementById('hiddenDiv');
+
+  // Add event listener to checkbox
+  other_currency.addEventListener('change', function() {
+    if (this.checked) {
+      // If checkbox is checked, show the div
+      hiddenDiv.style.display = 'block';
+    } else {
+      // If checkbox is unchecked, hide the div
+      hiddenDiv.style.display = 'none';
+    }
+  });
+</script>
+  
+  
+
+<div class="row m-0 p-0 pt-4">
+  	<div class="col-12 pt-4 pb-4">
+		<h1 class="h1 m-0 p-0 pl-3"><em class="fa-solid fa-comment"></em> Comments </h1>
+		<hr class="m-3" />
+		
+		
+		  <div class="form-group">
+			<label for="exampleInputEmail1">Enter Comment</label>
+			<textarea id="comment" name="comment" onchange="master_data(this.name,this.value)" autocomplete="on"><?=$comment?></textarea>
+			<small id="emailHelp" class="form-text text-muted">Send comment notification to a user</small>
+		  </div>
+	</div>
+  </div>
+    
+  
+
+<div class="row m-0 p-0 pt-0">
+  	<div class="col-12 pt-0 pb-4">
+
+		<!--Section Start-->
+  <div class="accordion" id="accordionExample">
+  <div class="card">
+    <!--Section Header Start-->
+   <button class="btn btn-link collapsed p-0" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+    <div class="card-header" id="headingThree">
+      <h5 class="mb-0">
+          		<h1 class="h1 m-0 p-0 pl-3 text-left"><em class="fa-solid fa-clock-rotate-left"></em> History </h1>
+      </h5>
+    </div>
+   </button>
+	<!--Section Header End-->
+	
+    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+      <div class="card-body">
+	  <!--Section Body start-->
+	  <div class="row m-0 p-0 col-sm-12 bg-alerts-bg">
+				    <button id="btnExport" class="btn btn-success" type="button" onclick="fnExcelReport();" style="cursor: pointer;"> Download </button>
+				<table id="ExportTable" class="sourcing-table">
+                    <tbody class="tbody1">		
+					        		<?php 
+		/*$sql='select m.comment,u.fname,m.entry_at from rfq_master m,user_activity_management u where m.entry_by=u.user_id and m.rfq_no="'.$_SESSION[$unique].'"';
+		$qry = db_query($sql);
+		while($comment = mysqli_fetch_object($qry)){*/
+		$liveID = find_a_field('rfq_logs','id','field_name="Submit Event" and rfq_no='.$_SESSION[$unique]);
+		$sql='select m.field_name, m.field_value,u.fname,m.entry_at from rfq_logs m,user_activity_management u where m.entry_by=u.user_id and m.id>="'.$liveID.'" and m.rfq_no="'.$_SESSION[$unique].'"';
+		$qry = db_query($sql);
+		while($comment = mysqli_fetch_object($qry)){
+		?>
+						<tr>
+							<td width="30%"><span class="bold"><?=$comment->field_name?>: </span> <?=$comment->field_value?></td>
+							<td width="80%"><span class="bold"><?=$comment->fname?></span> - <?=$comment->entry_at?></td>
+                        </tr>	
+		<?php } ?>		
+		<tr>
+			<td colspan="2" class="text-left alert alert-info"><span class="bold">Supplier Log</span></td>
+		</tr>
+
+		<?php
+		 $sql='select m.field_name, m.field_value,u.vendor_name,m.entry_at from vendor_entry_log m, vendor u 
+				where m.vendor_id=u.vendor_id and m.rfq_no="'.$_SESSION[$unique].'" order by u.vendor_name asc';
+		$qry = db_query($sql);
+		while($comment = mysqli_fetch_object($qry)){
+		?>
+						<tr>
+							<td width="30%"><span class="bold"><?=$comment->field_name?>: </span> <?=$comment->field_value?></td>
+							<td width="80%"><span class="bold"><?=$comment->vendor_name?></span> - <?=$comment->entry_at?></td>
+						</tr>
+
+		<?php } ?>		
+					</tbody>
+                </table>
+
+		</div>
+		
+		<!--Section Body End-->
+      </div>
+    </div>
+  </div>
+</div>
+<!--Section End-->
+		
+
+				
+	</div>
+  </div>
+  
+  
+  
+  </div>
+  <script>
+	$('#basicsourcinglogo').change(function () {
+		$('#uploadlogobasicsourcing button[type="submit"]').click();
+
+
+});
+$('#uploadlogobasicsourcing').submit(function (e) {
+	e.preventDefault();
+
+$('.filepercentageandloader').css('display', 'block');
+$('.drop-area2').css('display', 'none');
+
+var formId = $(this).attr('id');
+var $container = $(this).closest('.attachment-toggle').find('.attachmentshowcontainer');
+var $mothercontainer = $(this).closest('.attachment-toggle').find('.fileuploadcontainer');
+
+
+
+
+var formData = new FormData(this);
+    var motherContainerValue = formData.get('motherContainer');
+    var datashowContainerValue = formData.get('datashowContainer');
+    var progressBarContainer = $('.filepercentageandloaderbuyer');
+
+
+        formData.getAll('eprocfiles[]').forEach(function (file, index) {
+    
+            var fileProgressBar = $('<div class="rounded " style="margin-top: 10px !important; width: 100% !important; height: 70px !important; background-color: #f7f7f7 !important; border: 1px solid #e6e6e6 !important;"><span>'+ file.name+'</span><div class="d-flex justify-content-around align-items-center "><div class="lds-spinner" style="position: relative !important; top: -5px !important;"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div><div class="progress " style="width: 70% !important; height: 12px !important;"><div class="progress-bar"  role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div></div></div>');
+            progressBarContainer.append(fileProgressBar)
+})
+
+var progressBar = $('.progress-bar');
+
+$.ajax({
+    url: '../../../views/eProcurement_mod/api/new_api_logo_upload.php',
+    type: 'POST',
+    data: formData,
+    xhr: function () {
+        var xhr = new window.XMLHttpRequest();
+        xhr.upload.addEventListener("progress", function (evt) {
+            if (evt.lengthComputable) {
+                var percentComplete = (evt.loaded / evt.total) * 100;
+                progressBar.width(percentComplete + '%');
+                progressBar.attr('aria-valuenow', percentComplete);
+                progressBar.text(percentComplete.toFixed(2) + '%');
+            }
+        }, false);
+        return xhr;
+    },
+    success: function (responseData) {
+       console.log("Dddddddddd");
+      console.log(responseData);
+		var responseObject = JSON.parse(responseData);
+
+
+$.each(responseObject, function(index, item) {
+	
+	var newImageUrl = "../../../controllers/utilities/api_upload_attachment_show.php?name="+item.new_name+"&folder="+item.tr_from;
+
+	console.log(newImageUrl);
+var imageElement = document.getElementById("logoshowbasicsourcing");
+imageElement.setAttribute("src", newImageUrl);
+
+
+    $mothercontainer.removeClass('fileuploadcontaineropened');
+
+	$('.filepercentageandloader').empty();
+	$('.filepercentageandloader').css('display', 'none');
+    $('.drop-area2').css('display', 'block');
+
+	
+});
+  
+
+
+    },
+    error: function (xhr, status, error) {
+        console.error('Error uploading image:', error);
+        $('#response').text('Error uploading image. Please try again.');
+    },
+    cache: false,
+    contentType: false,
+    processData: false
+});
+});
+
+</script>
+
+<script>
+	$(document).ready(function() {
+		var selectedValues = <?php echo json_encode($selected_currency_ids); ?>;
+
+
+         $('#multiple-select-field').val(selectedValues).trigger('change');
+	$( '#multiple-select-field' ).select2( {
+		theme: "bootstrap-5",
+		width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+		placeholder: $( this ).data( 'placeholder' ),
+		closeOnSelect: false,
+	} );
+
+        function logNewlySelectedOption(selectedValue) {
+			getData2('currency_multiple_selectoion.php','showcurrencymmmm',selectedValue);
+        }
+		function logNewlyUnselectedOption(unselectedValue) {
+            getData2('currency_multiple_selectoion_delete.php','showcurrencymmmm',unselectedValue);
+        }
+     
+		$('#multiple-select-field').on('select2:select', function(e) {
+            var selectedValue = e.params.data.id;
+            logNewlySelectedOption(selectedValue);
+        });
+		$('#multiple-select-field').on('select2:unselect', function(e) {
+            var unselectedValue = e.params.data.id;
+            logNewlyUnselectedOption(unselectedValue);
+        });
+	});
+</script>
+  
+  
+  <?
+  function attachment_text_show($trFrom){
+
+    ob_start();
+	
+	?>
+											  
+											<?
+												$sql = 'select * from rfq_documents_url_information where tr_from like "'.$trFrom.'" and rfq_no="'.$_SESSION['rfq_no'].'" and entry_by = "'.$_SESSION['user']['id'].'"';
+												$qry = db_query($sql);
+
+												while($res = mysqli_fetch_object($qry)){
+												
+											?>
+																						<?
+											if($res->attachment_url == '' || $res->attachment_url=='NULL')
+											
+											
+												
+											
+											{   if($trFrom='sourcing_basic_settings'){
+												echo '<script>document.getElementById("attachmentsTextLabel").style.display = "block";</script>';
+											}
+											 if($trFrom='sourcing_terms_condition'){
+												echo '<script>document.getElementById("attachmentsTextLabelsourcing_terms_condition").style.display = "block";</script>';
+											}
+											 if($trFrom='sourcing_internel_eventinfo'){
+												echo '<script>document.getElementById("attachmentsTextLabelsourcing_internel_eventinfo").style.display = "block";</script>';
+											}
+											?>
+												<div class="col-sm-12 col-md-12 col-lg-12 pb-1">
+													<div class="rounded p-2" style=" word-break: break-all; background-color: #f7f7f7 !important; border: 1px solid #e6e6e6!important; ">
+														<span><em class="fa-solid fa-envelope-open-text fa-xl" style="color: #d6960a;"></em>
+															<span><?=$res->attachment_text?></span></span>
+															<? if($_SESSION['master_status']=='MANUAL'){?>
+															<button type="button" style=" display: inline !important;" class="border-0" onclick="deleteAttachmentTextseventinfo(this,'<?=$res->documents_url_id?>', '<?=$res->rfq_no?>', '<?=$res->tr_from?>', '<?=$res->entry_by?>', 'attachmenttextuploadcontainereventinfo','attachmentshowcontainereventinfo-text')">
+																<em class="fa-solid fa-xmark"></em>
+															</button>
+															<? } ?>
+													</div>
+												</div>
+											<? } ?>
+											<? } ?>
+	 <?																			
+		$data = ob_get_clean();	
+		echo $data;	
+							
+  }
+  
+  ?>
+
+  <?
+   function attachment_url_show($trFrom){
+
+    ob_start();
+	
+	?>
+											  
+											<?
+												$sql = 'select * from rfq_documents_url_information where tr_from like "'.$trFrom.'" and rfq_no="'.$_SESSION['rfq_no'].'" and entry_by = "'.$_SESSION['user']['id'].'"';
+												$qry = db_query($sql);
+
+												while($res = mysqli_fetch_object($qry)){
+												
+												
+											?>
+											<?
+											if($res->attachment_text == '' || $res->attachment_text=='NULL')
+										
+											
+											{
+												// echo $trFrom;
+
+												 if($trFrom='sourcing_terms_condition'){
+													echo '<script>document.getElementById("attachmentsUrlLabelsourcing_terms_condition").style.display = "block";</script>';
+												}
+												if($trFrom='sourcing_basic_settings'){
+													echo '<script>document.getElementById("attachmentsUrlLabel").style.display = "block";</script>';
+												}
+												 if($trFrom='sourcing_internel_eventinfo'){
+													echo '<script>document.getElementById("attachmentsUrlLabelsourcing_internel_eventinfo").style.display = "block";</script>';
+												}
+
+											?>
+											<div class="col-sm-8 col-md-8 col-lg-8 pb-1">
+													<div class="rounded p-2" style="word-break: break-all; background-color: #f7f7f7 !important; border: 1px solid #e6e6e6!important; ">
+													<a href="<?=$res->attachment_url?>" target="_blank" rel="noopener"><em class="fa-solid fa-link fa-xl" style="color: #d6960a;"></em>
+														<span><?=$res->attachment_url?></span></a>
+														<? if($_SESSION['master_status']=='MANUAL'){?>
+															<button type="button" style=" display: inline !important;" class="border-0" onclick="deleteAttachmentURLseventinfo(this,'<?=$res->documents_url_id?>' , '<?=$res->rfq_no?>','<?=$res->tr_from?>', '<?=$res->entry_by?>', 'attachmenturluploadcontainereventinfo','attachmentshowcontainereventinfo-url')"><em class="fa-solid fa-xmark"></em>
+															</button>
+															<? } ?>
+													</div>
+												</div>
+											<? } ?>
+											<? } ?>
+	 <?																			
+		$data = ob_get_clean();	
+		echo $data;	
+							
+  }
+  
+  ?>	
+  
+  <!--this seript for excel-->
+<script type="text/javascript" src="../../../../public/assets/js/xlsx.full.min.js"></script>
+<script>
+
+    function html_table_to_excel(type, filename)
+    {
+        var data = document.getElementById('ExportTable');
+
+        var file = XLSX.utils.table_to_book(data, {sheet: "sheet1"});
+
+        XLSX.write(file, { bookType: type, bookSST: true, type: 'base64' });
+
+        XLSX.writeFile(file, filename + '.' + type);
+    }
+
+    const export_button = document.getElementById('btnExport');
+    
+    // Get the dynamic file name
+    const eventName = "<?= $event_name ?>";
+    const rfqVersion = "<?= $_SESSION['rfq_version'] ?>";
+    const fileName = `${eventName} #${rfqVersion}`;
+
+    export_button.addEventListener('click', () =>  {
+        html_table_to_excel('xlsx', fileName);
+    });
+
+</script>
+
+  <!--this seript for excel-->

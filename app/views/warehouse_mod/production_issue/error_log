@@ -1,0 +1,8 @@
+[15-Oct-2025 07:54:12 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ezzyerp/public_html/saaserp.ezzy-erp.com/app/controllers/routing/print_view.top.php on line 2
+[15-Oct-2025 07:54:12 UTC] PHP Notice:  Only variables should be passed by reference in /home/ezzyerp/public_html/saaserp.ezzy-erp.com/app/controllers/config/db_con_print_view.php on line 11
+[15-Oct-2025 07:54:12 UTC] PHP Warning:  Undefined array key "update" in /home/ezzyerp/public_html/saaserp.ezzy-erp.com/app/views/warehouse_mod/production_issue/production_issue_report.php on line 12
+[15-Oct-2025 07:54:12 UTC] PHP Warning:  Attempt to read property "id" on null in /home/ezzyerp/public_html/saaserp.ezzy-erp.com/app/controllers/routing/layout.report.bottom.php on line 13
+[15-Oct-2025 07:54:12 UTC] PHP Warning:  Undefined variable $tr_from in /home/ezzyerp/public_html/saaserp.ezzy-erp.com/app/controllers/routing/layout.report.bottom.php on line 28
+[15-Oct-2025 07:54:12 UTC] PHP Warning:  Undefined variable $tr_no in /home/ezzyerp/public_html/saaserp.ezzy-erp.com/app/controllers/routing/layout.report.bottom.php on line 28
+[15-Oct-2025 07:54:12 UTC] PHP Warning:  Undefined variable $tr_id in /home/ezzyerp/public_html/saaserp.ezzy-erp.com/app/controllers/routing/layout.report.bottom.php on line 28
+[15-Oct-2025 07:54:12 UTC] PHP Warning:  Undefined variable $tr_type in /home/ezzyerp/public_html/saaserp.ezzy-erp.com/app/controllers/routing/layout.report.bottom.php on line 28

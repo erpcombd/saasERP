@@ -1,0 +1,5 @@
+Payment Mode
+Delivery Time
+Delivery Place
+Quality
+VAT & TAX

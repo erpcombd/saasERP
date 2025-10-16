@@ -1,0 +1,3 @@
+manual_ledger_id,ledger_name,ledger_group_name,acc_class_name,acc_sub_class_name,acc_sub_sub_class_name
+929,Factory Building,Factory Building,Asset,Non-Current Assets,"Property, Plant & Equipment"
+930,Office Building,Office Building & Others,Asset,Non-Current Assets,"Property, Plant & Equipment"
