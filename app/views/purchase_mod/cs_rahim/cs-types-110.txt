@@ -1,5 +1,0 @@
-Payment Mode
-Delivery Time
-Country Of Origin
-Shipment Type
-Freight Charge

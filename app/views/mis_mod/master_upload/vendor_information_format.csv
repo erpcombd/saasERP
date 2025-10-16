@@ -1,8 +1,0 @@
-manual_ledger_id,ledger_name,group_for,vendor_name,vendor_category_name,vendor_company,beneficiary_name,beneficiary_bank,beneficiary_bank_ac,address,contact_no,email,contact_person_name,contact_person_designation,contact_person_mobile,status
-,Payable - Power & Electricity,1,z-Excel-1,Manufacturer,,,,,,,,,,,ACTIVE
-,Vendor Payable,1,z-Excel-2,Manufacturer,,,,,,,,,,,ACTIVE
-,Vendor Payable,1,z-Excel-3,Manufacturer,,,,,,186745458,,,,,ACTIVE
-,Vendor Payable,1,z-Excel-4,Service,,,,,,1964136023,,,,,ACTIVE
-,Vendor Payable,1,z-Excel-5,E-commerce,,,,,,,,,,,ACTIVE
-,Vendor Payable,1,z-Excel-6,E-commerce,,,,,,,,,,,ACTIVE
-,Vendor Payable,1,z-Excel-7,E-commerce,,,,,,,,,,,ACTIVE

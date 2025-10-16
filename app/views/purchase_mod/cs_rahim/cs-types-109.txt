@@ -1,5 +1,0 @@
-Payment Mode
-Specification
-Delivery Place
-Delivery Time
-Transport Cost

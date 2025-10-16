@@ -1,7 +1,0 @@
-Payment Mode
-Delivery Place
-Delivery Time
-Quality
-VAT & TAX
-Supplier Location
-Per CFT Rate

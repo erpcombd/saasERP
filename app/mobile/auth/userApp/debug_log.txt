@@ -1,1 +1,0 @@
-[{"latitude":23.8102836,"longitude":90.357037,"EMP_CODE":"wer34554","staytime":0}]

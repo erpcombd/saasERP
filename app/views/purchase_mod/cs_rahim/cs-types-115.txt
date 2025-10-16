@@ -1,5 +1,0 @@
-Brand
-Payment Mode
-Delivery Time
-Delivery Place
-VAT & TAX

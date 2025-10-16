@@ -1,8 +1,0 @@
-||AMI Industries (Pvt.) Ltd.||Server of ERP Software||01||Server||InterCloud Limited
-Dhaka Colo (Pvt.) Ltd.
-||Server Specification
-Additional Software
-Object Storage (Backup)
-Recurring Billing
-VAT (5%)
-||[data-1_1]55200.00[data-1_1][data-1_2]75,285.00[data-1_2][data-2_1]55,200.00[data-2_1][data-2_2]75,285.00[data-2_2][data-3_1]32 Core vCPU, 64 GB RAM, 01 TB NVMe Storage, 100Mbps Internet Speed[data-3_1][data-3_2]32 Core vCPU, 64 GB RAM, 01 TB NVMe Storage, 20Mbps Internet Speed[data-3_2][data-4_1]Not Included[data-4_1][data-4_2]WHM cPanel 01 Account, Imunify360 Antivirus, CloudLinux OS[data-4_2][data-5_1]02 TB[data-5_1][data-5_2]02 TB[data-5_2][data-6_1]Monthly[data-6_1][data-6_2]Monthly[data-6_2][data-7_1]Excluding[data-7_1][data-7_2]Including[data-7_2]||||||Nasir Uddin||||||

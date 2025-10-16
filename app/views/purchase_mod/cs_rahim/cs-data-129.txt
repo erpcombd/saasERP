@@ -1,1 +1,0 @@
-[data-1_1]234.5[data-1_1][data-1_2]180[data-1_2][data-2_1]13,601.00[data-2_1][data-2_2]10,440.00[data-2_2][data-3_1]30 days after delivery[data-3_1][data-3_2]30 days after delivery[data-3_2][data-4_1]Excluding[data-4_1][data-4_2]Excluding[data-4_2][data-5_1]C - Type[data-5_1][data-5_2]C - Type[data-5_2][data-6_1]Japan[data-6_1][data-6_2]Korea[data-6_2]

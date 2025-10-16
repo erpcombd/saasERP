@@ -1,1 +1,0 @@
-[data-1_1]7000[data-1_1][data-1_2]8500[data-1_2][data-2_1]7,000.00[data-2_1][data-2_2]8,500.00[data-2_2][data-3_1]china[data-3_1][data-3_2]china[data-3_2][data-5_1]2900[data-5_1][data-9_1]1 HP[data-9_1][data-10_1]1 Year service warranty[data-10_1]
